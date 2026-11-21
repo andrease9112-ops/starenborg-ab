@@ -77,11 +77,19 @@ body{background:#0b202b!important}
 #content .pagehead>.shell::before,
 #content .pagehead>.shell::after{display:none!important}
 #content .pagehead h1{color:#fff!important}
-#content:has(.department-scroll-copy) :is(.pagehead > .shell,.pinstripe-panel,.section > .shell,.card,.notice){
- background:rgba(7,26,37,.5)!important;
+#content .pagehead,
+#content .pagehead > .shell,
+#content .hero-title{
+ background:transparent!important;
  border:0!important;
  box-shadow:none!important;
- border-radius:14px;
+}
+#content :is(.pinstripe-panel,.section > .shell,.division-section > .shell,.monthly-news > .shell,.monthly-panel,.card,.notice){
+ background:rgba(7,26,37,.78)!important;
+ border:0!important;
+ box-shadow:none!important;
+ border-radius:16px;
+ color:#f4ebe0!important;
 }
 #content .section,#content .hero-copy,#content .division-section,#content .monthly-news{padding:18px 14px!important}
 #content .section a.btn,#content .hero-copy a.btn{color:#0a1a22}

@@ -182,6 +182,9 @@ if(headingPanel){
   (subnav || document.querySelector("#content > .hero-nav")).after(headingPanel);
  }
 }
+document.querySelectorAll(".pinstripe-panel > .hero-title").forEach(title=>{
+ title.parentElement.before(title);
+});
 
 const heroImage=document.querySelector("#content > .hero > img");
 if(page!=="admin"){
