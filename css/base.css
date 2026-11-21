@@ -509,5 +509,35 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content .about-story > .shell{max-width:780px;text-align:center}
 #content .about-story p,#content .about-story h2{white-space:pre-line}
 
+/* Avdelningssidor: inga färgade rutor, inga gula/guldlinjer – bara text på bilden */
+#content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice),
+#content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice)::before,
+#content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice)::after{
+ background:transparent!important;
+ background-image:none!important;
+ border:0!important;
+ border-color:transparent!important;
+ box-shadow:none!important;
+ outline:0!important;
+}
+#content:has(.department-scroll-copy) :is(.pinstripe-panel,.pagehead .shell,.shell)::before,
+#content:has(.department-scroll-copy) :is(.pinstripe-panel,.pagehead .shell,.shell)::after,
+#content:has(.department-scroll-copy) .corner{
+ content:none!important;
+ display:none!important;
+ width:0!important;
+ height:0!important;
+ border:0!important;
+}
+#content:has(.department-scroll-copy) :is(h1,h2,h3,p,li,.eyebrow,.lead){
+ color:#fff!important;
+ text-shadow:0 1px 3px rgba(0,0,0,.65),0 0 10px rgba(0,0,0,.45)!important;
+}
+#content:has(.department-scroll-copy) .section > .shell,
+#content:has(.department-scroll-copy) .hero-copy > .shell{
+ padding-inline:0!important;
+ margin-bottom:18px!important;
+}
+
 
 
