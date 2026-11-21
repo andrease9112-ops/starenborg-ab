@@ -280,23 +280,140 @@
     text-align: center;
   }
 
-  #content > .hero-home {
-    height: clamp(320px, calc(100svh - var(--mobile-header-height)), 640px);
+  /*
+   * Dynamic image framing for every phone/tablet ≤800px.
+   * Same crop language on all devices: cover the frame, keep the subject
+   * in the safe zone under the fixed logo + nav.
+   */
+  :root {
+    --mobile-image-safe-top: calc(var(--mobile-header-height) + 44px);
   }
 
   #content:has(> .hero-home) {
     padding-top: var(--mobile-header-height) !important;
   }
 
-  /* Nav sits on top of the horse image, not in a solid bar */
   #content:has(> .hero-home) > .hero-nav {
     top: calc(var(--mobile-header-height) + 6px) !important;
   }
 
-  #content > .hero img,
-  #content > .hero-home img {
-    max-height: none;
-    object-fit: cover;
+  #content > .hero,
+  #content > .hero-home {
+    position: relative !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    background: #071a25 !important;
+  }
+
+  /* Home: fill the screen under the logo so the horse always fits the same way */
+  #content > .hero-home {
+    height: calc(100svh - var(--mobile-header-height)) !important;
+    min-height: 520px !important;
+    max-height: none !important;
+  }
+
+  /* Department hero spacer — backdrop carries the real photo */
+  #content > .hero:not(.hero-home) {
+    height: clamp(160px, 36svh, 280px) !important;
+  }
+
+  #content:has(.department-scroll-copy) > .hero {
+    height: clamp(150px, 34svh, 260px) !important;
+  }
+
+  #content > .hero > img,
+  #content > .hero-home > img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: cover !important;
+    object-position: center 42% !important;
+  }
+
+  /* Department pages use the backdrop photo; keep the spacer img hidden */
+  #content > .hero:not(.hero-home) > img {
+    opacity: 0 !important;
+  }
+
+  #content > .hero-home > img {
+    opacity: 1 !important;
+  }
+
+  /* Horse is on the left — keep the face in frame on every phone */
+  #content > .hero-home > img,
+  #content:has(.hero-home) > .hero-backdrop > img {
+    object-position: 28% 40% !important;
+  }
+
+  /* Full-bleed backdrop on all public pages */
+  #content > .hero-backdrop {
+    position: fixed !important;
+    top: var(--mobile-header-height) !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: -1 !important;
+    overflow: hidden !important;
+  }
+
+  #content > .hero-backdrop > img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 38% !important;
+  }
+
+  /* Per-page subject framing (same on phones + tablets) */
+  #content:has(img[src*="transport-hero"]) > .hero-backdrop > img,
+  #content > .hero > img[src*="transport-hero"] {
+    object-position: 55% 40% !important;
+  }
+
+  #content:has(img[src*="hastar-hero"]) > .hero-backdrop > img,
+  #content > .hero > img[src*="hastar-hero"] {
+    object-position: 28% 38% !important;
+  }
+
+  #content:has(img[src*="bygg-hero"]) > .hero-backdrop > img,
+  #content > .hero > img[src*="bygg-hero"] {
+    object-position: 60% 42% !important;
+  }
+
+  #content:has(img[src*="home-hero"]) > .hero-backdrop > img {
+    object-position: 28% 40% !important;
+  }
+
+  /* Title sits in the lower safe band so it does not cover faces */
+  #content > .hero-home > .pagehead {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: clamp(96px, 18svh, 160px) !important;
+    padding: 0 16px !important;
+    z-index: 2 !important;
+  }
+
+  #content > .hero-home > .pagehead h1 {
+    font-size: clamp(1.55rem, 6.2vw, 2.35rem) !important;
+  }
+
+  /* Any other content images scale consistently */
+  #content img:not(.starenborg-logo) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #content .card img,
+  #content .portal-box img,
+  #content img.preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
   }
 
   .two,
@@ -315,10 +432,6 @@
     max-width: 1120px !important;
     padding: 0 !important;
     background: transparent !important;
-  }
-
-  #content:has(.department-scroll-copy) > .hero {
-    height: clamp(140px, 32svh, 240px);
   }
 
   #content .monthly-news > .shell {
