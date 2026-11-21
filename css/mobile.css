@@ -2,7 +2,7 @@
 @media (max-width: 800px) {
   :root {
     --mobile-header-height: 58px;
-    --mobile-nav-height: 78px;
+    --mobile-nav-height: 132px;
     --mobile-safe-top: env(safe-area-inset-top, 0px);
   }
 
