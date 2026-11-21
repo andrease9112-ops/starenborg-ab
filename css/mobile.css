@@ -86,9 +86,8 @@
     min-height: var(--mobile-nav-height);
     box-sizing: border-box;
     pointer-events: none !important;
-    background: #071a25 !important;
+    background: transparent !important;
     border: 0 !important;
-    border-bottom: 1px solid rgba(174, 151, 115, 0.35) !important;
   }
 
   .hero-nav a {
@@ -257,8 +256,9 @@
   }
 
   #content > .pagehead {
-    position: static;
-    padding: 14px 12px 6px !important;
+    position: relative;
+    z-index: 2;
+    padding: 8px 12px 6px !important;
     background: transparent !important;
     border: 0 !important;
   }
@@ -284,47 +284,69 @@
     text-align: center;
   }
 
-  /*
-   * Real phone layout: every hero is a full-width banner.
-   * height:auto keeps the whole photo (horse, truck, excavator) — no crop, no letterbox.
-   */
+  /* Each page photo is the full background. Text scrolls over it. */
   #content > .hero-backdrop {
-    display: none !important;
+    display: block !important;
+    position: fixed !important;
+    top: calc(var(--mobile-header-height) + var(--mobile-safe-top)) !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: -1 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #content > .hero-backdrop > img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 42% !important;
+    opacity: 1 !important;
   }
 
   #content > .hero,
   #content > .hero-home,
   #content:has(.department-scroll-copy) > .hero {
     position: relative !important;
-    width: 100% !important;
-    height: auto !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  #content > .hero-home {
+    height: calc(100svh - var(--mobile-header-height) - var(--mobile-safe-top)) !important;
     min-height: 0 !important;
-    max-height: none !important;
-    overflow: hidden !important;
-    background: #071a25 !important;
   }
 
   #content > .hero > img,
-  #content > .hero-home > img,
-  #content > .hero:not(.hero-home) > img {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    margin: 0 !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-    opacity: 1 !important;
-    background: #071a25 !important;
+  #content > .hero-home > img {
+    opacity: 0 !important;
   }
 
   #content > .hero-home > .pagehead {
-    position: static !important;
-    padding: 18px 16px 4px !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: clamp(72px, 16svh, 140px) !important;
+    z-index: 2 !important;
+    padding: 0 16px !important;
   }
 
   #content > .hero-home > .pagehead h1 {
-    font-size: clamp(1.45rem, 6.4vw, 2.15rem) !important;
+    font-size: clamp(1.55rem, 6.4vw, 2.3rem) !important;
+  }
+
+  /* Fade text out as it scrolls past the locked buttons */
+  #content > .department-scroll-copy,
+  #content > .monthly-news,
+  #content > .section,
+  #content > .hero-copy,
+  #content > .pagehead,
+  #content > .hero-home > .pagehead {
+    -webkit-mask: linear-gradient(to bottom, transparent, #000 72px) bottom / 100% calc(100% - var(--fade-start, -72px)) no-repeat !important;
+    mask: linear-gradient(to bottom, transparent, #000 72px) bottom / 100% calc(100% - var(--fade-start, -72px)) no-repeat !important;
   }
 
   #content img:not(.starenborg-logo) {
