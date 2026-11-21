@@ -429,9 +429,10 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content:has(.hero-backdrop) :is(.hero-copy,.monthly-news,.section,.division-section) > .shell,
 #content:has(.hero-backdrop) :is(.pinstripe-panel,.card,.division-card,.notice),
 #content:has(.hero-backdrop) .pagehead > .shell{
- background:transparent!important;
+ /* Lätt mörk ton så bakgrundsbilden syns, utan vit frost */
+ background:rgba(0,0,0,.18)!important;
  background-image:none!important;
- border:1px solid rgba(188,165,135,.55)!important;
+ border:1px solid rgba(232,214,184,.45)!important;
  box-shadow:none!important;
  backdrop-filter:none!important;
  -webkit-backdrop-filter:none!important;
@@ -440,7 +441,7 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  border-radius:14px;
  padding:14px 22px!important;
 }
-#content:has(.hero-backdrop) .division-card{border:1px solid rgba(188,165,135,.55)!important}
+#content:has(.hero-backdrop) .division-card{border:1px solid rgba(232,214,184,.45)!important}
 #content:has(.hero-backdrop) :is(.pagehead,.hero-copy,.monthly-news,.section,.division-section)
  :is(h1,h2,h3,h4,p,li,ul,ol,div,span,strong,small,a,label):not(.portal-wide,.portal-wide *,.btn){
  color:var(--public-text)!important;
