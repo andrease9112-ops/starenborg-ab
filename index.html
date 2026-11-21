@@ -211,6 +211,11 @@ document.querySelectorAll("#content .division-section > .shell").forEach(shell=>
 });
 document.querySelector("#content .about-story > .shell")?.classList.add("intro-box");
 document.querySelector("#content .monthly-panel")?.classList.add("intro-box");
+document.querySelectorAll(".intro-box").forEach(box=>{
+ const heading=box.querySelector(":scope > h2");
+ const label=box.querySelector(":scope > .eyebrow");
+ if(heading&&label)heading.after(label);
+});
 
 const heroImage=document.querySelector("#content > .hero > img");
 if(page!=="admin"){

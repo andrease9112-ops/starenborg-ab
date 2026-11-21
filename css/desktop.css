@@ -113,9 +113,13 @@ body{background:#0b202b!important}
  text-shadow:none!important;
 }
 #content .intro-box{
- background:rgba(7,26,37,.78)!important;
+ background:rgba(255,248,240,.82)!important;
  border-radius:16px!important;
- color:#e6c49a!important;
+ color:#071a25!important;
+}
+#content .intro-box :is(h2,p,li,span.eyebrow,.lead,.division-intro){
+ color:#071a25!important;
+ text-shadow:none!important;
 }
 #content .department-scroll-copy .hero-copy > .shell{
  width:min(1120px,calc(100% - 72px))!important;
@@ -181,3 +185,17 @@ body{background:#0b202b!important}
 }
 
 @media(min-width:801px){#content:has(> .contact-layout){padding-top:62px}}
+#content .pinstripe-panel.intro-box,
+#content .about-story > .shell.intro-box,
+#content .monthly-panel.intro-box,
+#content .division-section .intro-box,
+#content .section .intro-box{
+ background:rgba(255,248,240,.82)!important;
+ color:#071a25!important;
+ border-radius:16px!important;
+}
+#content .pinstripe-panel.intro-box :is(h2,p,li,span.eyebrow,.lead),
+#content .intro-box :is(h2,p,li,span.eyebrow,.lead,.division-intro){
+ color:#071a25!important;
+ text-shadow:none!important;
+}

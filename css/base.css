@@ -578,9 +578,13 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  padding-inline:0!important;
  margin-bottom:18px!important;
 }
-#content .intro-box{
- background:rgba(7,26,37,.78)!important;
- color:#e6c49a!important;
+#content .pinstripe-panel.intro-box,
+#content .about-story > .shell.intro-box,
+#content .monthly-panel.intro-box,
+#content .division-section .intro-box,
+#content .section .intro-box{
+ background:rgba(255,248,240,.82)!important;
+ color:#071a25!important;
  border:0!important;
  border-radius:16px!important;
  box-shadow:none!important;
@@ -596,12 +600,13 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content .department-scroll-copy .hero-copy .pinstripe-panel.intro-box{
  padding:clamp(22px,3vw,36px) clamp(18px,3vw,40px)!important;
 }
-#content .intro-box :is(h2,p,li,.eyebrow,.lead,.division-intro){
- color:#e6c49a!important;
+#content .pinstripe-panel.intro-box :is(h2,p,li,span.eyebrow,.lead),
+#content .intro-box :is(h2,p,li,span.eyebrow,.lead,.division-intro){
+ color:#071a25!important;
  text-shadow:none!important;
 }
-#content .intro-box .eyebrow{display:block;margin-top:18px}
-#content .intro-box h2{margin:8px 0 0}
+#content .intro-box h2{margin:18px 0 0}
+#content .intro-box .eyebrow{display:block;margin-top:8px}
 #content .division-section,
 #content .division-section > .shell{background:transparent!important}
 #content .division-grid{
