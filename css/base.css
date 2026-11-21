@@ -508,7 +508,7 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content .about-story > .shell{max-width:780px;text-align:center}
 #content .about-story p,#content .about-story h2{white-space:pre-line}
 
-/* Rubriker på bilden: bara text. Innehållsrutor: ljus, genomskinlig champagne. */
+/* Rubriker utan ruta. Stor ruta: navy som bakgrunden. Små rutor: ljusare. */
 #content .pagehead,
 #content .pagehead > .shell,
 #content .hero-title{
@@ -523,8 +523,8 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  color:#e6c49a!important;
  text-shadow:0 2px 10px rgba(0,0,0,.75)!important;
 }
-#content :is(.pinstripe-panel,.section > .shell,.division-section > .shell,.monthly-news > .shell,.monthly-panel,.card,.notice){
- background:rgba(255,248,240,.32)!important;
+#content :is(.pinstripe-panel,.section > .shell,.division-section > .shell,.monthly-news > .shell,.monthly-panel,.notice){
+ background:rgba(7,26,37,.78)!important;
  background-image:none!important;
  color:#e6c49a!important;
  border:0!important;
@@ -533,6 +533,28 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  border-radius:16px;
  backdrop-filter:none!important;
  -webkit-backdrop-filter:none!important;
+}
+#content .section:has(.cards) > .shell{
+ background:transparent!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+#content .section .cards{
+ background:rgba(7,26,37,.78)!important;
+ border-radius:16px;
+ padding:22px;
+}
+#content .section .cards > .card{
+ background:rgba(255,248,240,.82)!important;
+ background-image:none!important;
+ color:#071a25!important;
+ border:0!important;
+ box-shadow:none!important;
+ border-radius:16px;
+}
+#content .section .cards > .card :is(h3,p,li){
+ color:#071a25!important;
+ text-shadow:none!important;
 }
 #content :is(.pinstripe-panel,.section,.division-section,.monthly-news,.card) :is(h2,h3,p,li,.eyebrow,.lead){
  color:#e6c49a!important;

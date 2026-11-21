@@ -84,12 +84,33 @@ body{background:#0b202b!important}
  border:0!important;
  box-shadow:none!important;
 }
-#content :is(.pinstripe-panel,.section > .shell,.division-section > .shell,.monthly-news > .shell,.monthly-panel,.card,.notice){
- background:rgba(255,248,240,.32)!important;
+#content :is(.pinstripe-panel,.section > .shell,.division-section > .shell,.monthly-news > .shell,.monthly-panel,.notice){
+ background:rgba(7,26,37,.78)!important;
  border:0!important;
  box-shadow:none!important;
  border-radius:16px;
  color:#e6c49a!important;
+}
+#content .section:has(.cards) > .shell{
+ background:transparent!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+#content .section .cards{
+ background:rgba(7,26,37,.78)!important;
+ border-radius:16px;
+ padding:22px;
+}
+#content .section .cards > .card{
+ background:rgba(255,248,240,.82)!important;
+ border:0!important;
+ box-shadow:none!important;
+ border-radius:16px;
+ color:#071a25!important;
+}
+#content .section .cards > .card :is(h3,p,li){
+ color:#071a25!important;
+ text-shadow:none!important;
 }
 #content .section,#content .hero-copy,#content .division-section,#content .monthly-news{padding:18px 14px!important}
 #content .section a.btn,#content .hero-copy a.btn{color:#0a1a22}
