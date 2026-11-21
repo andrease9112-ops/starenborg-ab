@@ -1,0 +1,101 @@
+/* Desktop only. Put computer layout changes here. */
+@media(min-width:801px){
+ .hero-nav{
+  position:fixed;z-index:20;inset:calc(var(--desktop-header-height) + 5px) 0 auto;
+  display:flex;align-items:center;justify-content:center;gap:10px;padding:0 16px;
+  pointer-events:none;
+
+ }
+ .hero-nav a{
+  pointer-events:auto;display:flex;align-items:center;justify-content:center;min-width:114px;min-height:42px;
+  padding:8px 16px;border:1px solid #c9aa80;border-radius:8px;
+  background:#0b202bf2;color:#f4dfbf;text-decoration:none;font:700 14px Arial,sans-serif;
+ }
+ .hero-nav a[aria-current="page"]{box-shadow:inset 0 -2px #e6c49a}
+ #content > .subnav-wrap{display:none}
+ .hero-nav a.portal-link{background:#e6c49a;color:#0b202b}
+ .hero-nav a:hover,.hero-nav a:focus-visible{outline:2px solid #f4dfbf;outline-offset:2px}
+ .hero-home + .division-section .division-grid,
+ .hero-home + .division-section .portal-wide{display:none!important}
+}
+
+@media (min-width: 701px) {
+
+html{scroll-behavior:smooth}
+body{background:#0b202b!important}
+#content{position:relative;background:transparent!important}
+#content .hero-copy,#content .section,#content .section.alt,#content .division-section,#content .monthly-news,#content .pagehead{
+ background:transparent!important;
+}
+#content .hero-copy>.shell,#content .section>.shell,#content .monthly-news>.shell,#content .division-section>.shell{
+ max-width:1160px;margin:clamp(18px,3vw,42px) auto;
+ padding:clamp(22px,4.5vw,56px)!important;
+ border-radius:18px;
+ background:rgba(255,255,255,.94)!important;
+ color:#152b34!important;
+ box-shadow:0 18px 55px rgba(0,0,0,.24);
+ backdrop-filter:blur(9px);
+}
+#content .hero-copy .lead,#content .hero-copy p,#content .section p,#content .division-section p{color:#263b44!important}
+#content .pinstripe-panel{background:rgba(255,255,255,.90)!important;color:#152b34!important;box-shadow:inset 0 0 0 8px rgba(255,255,255,.9),inset 0 0 0 9px #bca78b!important}
+#content .pinstripe-panel h1,#content .pinstripe-panel h2,#content .pinstripe-panel p,#content .monthly-panel h2,#content .monthly-panel p{color:#152b34!important}
+#content .monthly-panel{background:rgba(255,255,255,.90)!important;color:#152b34!important}
+#content .division-card{background:#f7f5f1!important;color:#152b34!important;border:1px solid #c9b99e}
+#content .division-card h2,#content .division-card p{color:#152b34!important}
+#content .section .card{background:#fff!important;color:#152b34!important}
+#content .pagehead{padding:32px 0 0!important}
+#content .pagehead>.shell{background:rgba(255,255,255,.92);border-radius:14px;padding:18px 24px;text-align:center;color:#152b34}
+#content .pagehead h1{color:#152b34!important}
+#content .section,#content .hero-copy,#content .division-section,#content .monthly-news{padding:18px 14px!important}
+#content .section a.btn,#content .hero-copy a.btn{color:#0a1a22}
+@media(min-width:1000px){
+ #content .hero-copy>.shell,#content .section>.shell,#content .monthly-news>.shell,#content .division-section>.shell{width:min(1120px,calc(100% - 72px))}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+}
+
+@media(min-width:801px){
+ :root{--desktop-header-height:152px}
+ body{padding-top:var(--desktop-header-height)}
+ #header{
+  position:fixed;inset:0 0 auto;z-index:30;
+  height:var(--desktop-header-height);background:#071a25;
+ }
+ #header .top{height:100%;box-sizing:border-box}
+ #header .top-inner{
+  height:100%;min-height:0;padding:0!important;
+  justify-content:center;flex-wrap:nowrap
+ }
+ #header .brand{flex:none}
+ #header .starenborg-logo{height:136px;width:auto;max-width:100%;filter:drop-shadow(0 1px 3px #0008)}
+ #content{padding-top:57px}
+ .hero-backdrop{top:var(--desktop-header-height)}
+ .hero-backdrop img{object-position:center top}
+}
+
+@media(min-width:801px){
+ #content{padding-top:calc(52px + clamp(68px,7.4vw,100px))}
+ #content > .pagehead{
+  position:fixed;inset:calc(var(--desktop-header-height) + 52px) 0 auto;
+ }
+ #content > .pagehead h1{font-size:clamp(2.95rem,4.45vw,4.5rem)!important}
+
+}
+
+@media(min-width:801px){
+ #content:has(.department-scroll-copy) > .hero{
+  height:var(--department-hero-space,clamp(32px,calc(50svh - 215px),250px));
+ }
+ #content .department-scroll-copy .hero-copy > .shell{
+  width:100%;max-width:none;padding-inline:0!important;
+ }
+
+}
+
+@media(min-width:801px){
+ #content:has(> .hero-home){padding-top:52px}
+ #content > .hero-home{height:max(190px,calc(100svh - var(--desktop-header-height) - 52px))}
+}
+
+@media(min-width:801px){#content:has(> .contact-layout){padding-top:62px}}

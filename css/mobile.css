@@ -1,0 +1,80 @@
+/* Mobile + tablet only. Put phone/tablet layout changes here. */
+@media(max-width:800px){.top-inner{flex-wrap:wrap;padding:15px 0}.menu-btn{display:block;margin-left:auto}.nav{display:none;width:100%;flex-direction:column;align-items:stretch;gap:0;padding-bottom:10px}.nav.open{display:flex}.nav a{padding:12px 4px;border-bottom:1px solid #ffffff1c}.cards{grid-template-columns:1fr}.two{grid-template-columns:1fr}.hero-copy{padding:30px 0 42px}.hero img{max-height:none}.section{padding:42px 0}}
+
+@media(max-width:800px){.hero-title{font-size:clamp(1.8rem,7.7vw,3.9rem);line-height:1.14;letter-spacing:-.045em;margin:8px 0 28px}}
+
+@media(max-width:390px){.hero-title{font-size:7.4vw}}
+
+@media(max-width:800px){.section .lead{font-size:1.16rem;line-height:1.65}}
+
+@media(max-width:800px){.top-inner .menu-btn{order:-1;margin-left:0;margin-right:10px}.top-inner .brand{margin-right:auto}.top-inner .nav{order:3;text-align:left}}
+
+@media(max-width:800px){
+.top-inner:has(.menu-btn:first-child){justify-content:flex-start}
+.pagehead{padding:36px 0 42px}
+.pagehead::before{left:12px}.pagehead::after{right:12px}
+.pagehead .shell{text-align:center}
+}
+
+@media(max-width:650px){.pinstripe-panel{padding:48px 19px 44px}.corner{width:62px;height:62px}.pinstripe-panel .hero-title{font-size:clamp(1.95rem,7vw,3.1rem)}.pinstripe-panel .hero-title span{display:block}.news-entry{grid-template-columns:42px 1fr;gap:14px}.news-num{font-size:1.6rem}.pagehead .shell:before,.pagehead .shell:after{width:45px;height:45px;top:-14px}}
+
+@media(max-width:650px){
+.pagehead{padding:32px 0!important}
+.pagehead .shell{min-height:110px;padding:24px 42px;width:calc(100% - 28px)}
+.pagehead h1{font-size:clamp(1.8rem,7.2vw,2.65rem)!important}
+.pagehead .shell::before,.pagehead .shell::after{width:50px;height:50px}
+.pinstripe-panel{padding:70px 22px!important}
+.pinstripe-panel .corner{width:52px;height:52px}
+.pinstripe-panel .hero-title{font-size:clamp(1.65rem,6.5vw,2.6rem)!important}
+.pinstripe-panel p{font-size:clamp(.95rem,3.8vw,1.12rem)}
+}
+
+@media(max-width:650px){
+.pagehead{background-size:min(260px,70%) auto;background-position:center 8px;padding-top:90px!important}
+.pagehead .shell{padding:20px 46px!important;min-height:95px}
+.pagehead .shell::before,.pagehead .shell::after{width:52px!important;height:52px!important}
+.pinstripe-panel{padding:100px 24px 100px!important}
+.pinstripe-panel::before,.pinstripe-panel::after{height:88px;width:78%}
+.pinstripe-panel .corner{width:60px;height:60px}
+}
+
+@media(max-width:650px){.pagehead{padding:22px 0!important}.pagehead .shell{min-height:100px!important;padding:25px 40px!important}.pagehead .shell::before,.pagehead .shell::after{width:29px!important;height:29px!important}.pinstripe-panel{padding:60px 24px!important}.pinstripe-panel .corner{width:28px!important;height:28px!important}}
+
+@media(max-width:800px){.hero-title span{white-space:normal}}
+
+@media(max-width:760px){.division-grid{grid-template-columns:1fr}.division-section{padding:42px 0}.division-card{min-height:0;padding:24px}}
+
+@media(max-width:500px){.division-section .eyebrow{font-size:.65rem}.division-card{border-width:1px!important}.division-card p{font-size:11px!important}.division-card h2{font-size:16px!important}.division-link{font-size:11px!important}}
+
+@media(max-width:420px){.division-section .division-icon svg{width:29px;height:29px}.division-section .division-card{border-radius:9px}}
+
+@media(max-width:760px){.division-section .shell{width:calc(100% - 20px)!important}.division-section .division-card{padding:12px 5px!important}.division-section .division-card h2{font-size:clamp(15px,4vw,22px)!important}.division-section .division-card p{font-size:clamp(10px,2.6vw,14px)!important}}
+
+@media(max-width:500px){.division-section .shell{width:calc(100% - 20px)}.division-section .division-card{border-radius:9px}}
+
+@media(max-width:480px){.division-section{padding:38px 0 52px!important}.division-section .division-grid{max-width:390px!important}.division-section .division-grid>.division-card{border-radius:9px!important}}
+
+@media(max-width:430px){.subnav{gap:6px}.subnav-choice{flex:0 1 calc((100% - 12px)/3);font-size:12px;padding:9px 4px}}
+
+@media(max-width:600px){.division-section .division-card p{display:none!important}.division-section .division-card{min-height:95px!important}.division-section .division-grid{gap:5px!important}.division-section .division-card h2{font-size:clamp(10px,2.7vw,15px)!important}}
+
+@media(max-width:420px){.division-section .division-grid{gap:4px!important}.division-section .division-grid>.division-card{height:63px!important;min-height:63px!important}.division-section .division-icon svg{width:22px!important;height:22px!important}}
+
+@media(max-width:390px){.division-section .shell{width:calc(100% - 16px)!important}.division-section .division-grid{gap:3px!important}.division-section .division-grid > .division-card h2{font-size:9px!important}}
+
+@media(max-width:520px){.portal-wide{width:calc(100% - 28px);font-size:13px;gap:7px}.portal-wide small{font-size:10px}.portal-wide svg{width:18px;height:18px}}
+
+@media(max-width:560px){.starenborg-mark{width:42px;height:34px}.brand{gap:5px}}
+
+@media(max-width:700px){#header .starenborg-logo{width:min(94vw,520px)}#header .top-inner{justify-content:center}}
+
+@media(max-width:600px){.division-grid>.division-card .division-icon{height:25px!important;min-height:25px!important;flex-basis:25px!important;font-size:24px!important}.division-grid>.division-card .division-icon svg{width:25px!important;height:25px!important;min-width:25px!important;min-height:25px!important;max-width:25px!important;max-height:25px!important}}
+
+@media(max-width:800px){
+ #content .contact-layout > .shell{grid-template-columns:1fr;gap:40px}
+}
+
+@media(max-width:800px){
+ #content > .hero-home{height:clamp(260px,62svh,600px)}
+ #header .starenborg-logo{width:min(96vw,560px)}
+}
