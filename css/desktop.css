@@ -112,6 +112,22 @@ body{background:#0b202b!important}
  color:#071a25!important;
  text-shadow:none!important;
 }
+#content .intro-box{
+ background:rgba(7,26,37,.78)!important;
+ border-radius:16px!important;
+ color:#e6c49a!important;
+}
+#content .department-scroll-copy .hero-copy > .shell{
+ width:min(1120px,calc(100% - 72px))!important;
+ max-width:1120px!important;
+ padding:0!important;
+ background:transparent!important;
+}
+#content .division-section .division-card{
+ background:rgba(255,248,240,.82)!important;
+ color:#071a25!important;
+ border:0!important;
+}
 #content .section,#content .hero-copy,#content .division-section,#content .monthly-news{padding:18px 14px!important}
 #content .section a.btn,#content .hero-copy a.btn{color:#0a1a22}
 @media(min-width:1000px){
@@ -154,7 +170,7 @@ body{background:#0b202b!important}
   height:var(--department-hero-space,clamp(32px,calc(50svh - 215px),250px));
  }
  #content .department-scroll-copy .hero-copy > .shell{
-  width:100%;max-width:none;padding-inline:0!important;
+  width:min(1120px,calc(100% - 72px))!important;max-width:1120px!important;margin-inline:auto!important;padding:0!important;background:transparent!important;
  }
 
 }

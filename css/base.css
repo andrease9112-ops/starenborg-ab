@@ -578,6 +578,47 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  padding-inline:0!important;
  margin-bottom:18px!important;
 }
+#content .intro-box{
+ background:rgba(7,26,37,.78)!important;
+ color:#e6c49a!important;
+ border:0!important;
+ border-radius:16px!important;
+ box-shadow:none!important;
+ padding:clamp(22px,3vw,36px) clamp(18px,3vw,40px)!important;
+ text-align:center;
+}
+#content .department-scroll-copy .hero-copy > .shell{
+ width:min(1120px,calc(100% - 36px))!important;
+ max-width:1120px!important;
+ margin-inline:auto!important;
+ background:transparent!important;
+}
+#content .department-scroll-copy .hero-copy .pinstripe-panel.intro-box{
+ padding:clamp(22px,3vw,36px) clamp(18px,3vw,40px)!important;
+}
+#content .intro-box :is(h2,p,li,.eyebrow,.lead,.division-intro){
+ color:#e6c49a!important;
+ text-shadow:none!important;
+}
+#content .intro-box .eyebrow{display:block;margin-top:18px}
+#content .intro-box h2{margin:8px 0 0}
+#content .division-section,
+#content .division-section > .shell{background:transparent!important}
+#content .division-grid{
+ background:rgba(7,26,37,.78)!important;
+ border-radius:16px;
+ padding:22px;
+}
+#content .division-section .division-card{
+ background:rgba(255,248,240,.82)!important;
+ color:#071a25!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+#content .division-section .division-card :is(h2,p,.division-link){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
 
 
 

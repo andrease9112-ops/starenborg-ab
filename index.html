@@ -185,6 +185,32 @@ if(headingPanel){
 document.querySelectorAll(".pinstripe-panel > .hero-title").forEach(title=>{
  title.parentElement.before(title);
 });
+document.querySelectorAll(".department-scroll-copy").forEach(copy=>{
+ const panel=copy.querySelector(".pinstripe-panel");
+ const shell=copy.querySelector(".section > .shell");
+ if(!panel||!shell)return;
+ [...shell.children].filter(el=>!el.classList.contains("cards")&&!el.querySelector(".btn")).forEach(el=>panel.append(el));
+ panel.classList.add("intro-box");
+});
+document.querySelectorAll("#content .section:has(.cards) > .shell").forEach(shell=>{
+ if(shell.closest(".department-scroll-copy"))return;
+ const moving=[...shell.children].filter(el=>!el.classList.contains("cards")&&!el.classList.contains("notice")&&!el.querySelector(".btn"));
+ if(!moving.length)return;
+ const box=document.createElement("div");
+ box.className="intro-box";
+ moving[0].before(box);
+ moving.forEach(el=>box.append(el));
+});
+document.querySelectorAll("#content .division-section > .shell").forEach(shell=>{
+ const moving=[...shell.children].filter(el=>el.matches(".eyebrow,.division-intro,h1,h2,p"));
+ if(!moving.length)return;
+ const box=document.createElement("div");
+ box.className="intro-box";
+ moving[0].before(box);
+ moving.forEach(el=>box.append(el));
+});
+document.querySelector("#content .about-story > .shell")?.classList.add("intro-box");
+document.querySelector("#content .monthly-panel")?.classList.add("intro-box");
 
 const heroImage=document.querySelector("#content > .hero > img");
 if(page!=="admin"){
