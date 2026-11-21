@@ -438,11 +438,16 @@ async function renderPortal(){
  const a=window.MALARDALA_AUTH;
  const demo=demoSession();
  if(!a?.user&&!demo){
-  el.innerHTML=`<div class="portal-box"><form onsubmit="portalLogin(event)"><label>E-post<input type="email" name="email" autocomplete="username" required></label><label>Lösenord<input type="password" name="password" autocomplete="current-password" required></label><button class="btn" type="submit">Logga in</button></form><p class="portal-note">Övningskonton tills den riktiga mejlen kopplas in: jessica@starenborg.se och andreas@starenborg.se, lösenord demo. De når bara övningsinkorgen.</p><p id="portal-message" role="status"></p></div>`;return;
+  el.innerHTML=`<div class="portal-box"><form onsubmit="portalLogin(event)"><label>E-post<input type="email" name="email" autocomplete="username" required></label><label>Lösenord<input type="password" name="password" autocomplete="current-password" required></label><button class="btn" type="submit">Logga in</button></form><p class="portal-note">Övning, lösenord demo. Personal: jessica@starenborg.se och andreas@starenborg.se. Kund: kund@starenborg.se, som kommer till kundsidan.</p><p id="portal-message" role="status"></p></div>`;return;
  }
  if(demo&&!a?.user){
   el.innerHTML=`<div class="portal-box"><p>Övningskonto <strong>${safe(demo.email)}</strong></p><p class="portal-note">Mejlen stannar i den här webbläsaren. Riktiga adresser kopplas in när domänen och Microsoft 365 är klara.</p><button type="button" onclick="switchDemoAccount()">Byt konto</button><button type="button" onclick="adminLogout()">Logga ut</button><p id="portal-message" role="status"></p></div><div id="portal-pane" class="portal-box">Laddar…</div>`;
   await renderInbox(document.getElementById('portal-pane'));
+  return;
+ }
+ if(a?.user&&!a.isAdmin){
+  if(openOmnioCustomer())return;
+  el.innerHTML=`<div class="portal-box"><p>Inloggad som kund <strong>${safe(a.user.email)}</strong></p><p>Kontot ska öppnas i Omnio, där fakturorna läggs in. Adressen till det riktiga kundkontot är inte inlagd ännu.</p><button type="button" onclick="adminLogout()">Logga ut</button></div>`;
   return;
  }
  const admin=a.isAdmin;
@@ -461,9 +466,18 @@ async function renderPortal(){
 const WORK_DOMAIN='starenborg.se';
 const INFO_ADDRESS='info@'+WORK_DOMAIN;
 const DEMO_ACCOUNTS=[
- {id:'demo-jessica',name:'Jessica',email:'jessica@starenborg.se',password:'demo'},
- {id:'demo-andreas',name:'Andreas',email:'andreas@starenborg.se',password:'demo'}
+ {id:'demo-jessica',name:'Jessica',email:'jessica@starenborg.se',password:'demo',role:'staff'},
+ {id:'demo-andreas',name:'Andreas',email:'andreas@starenborg.se',password:'demo',role:'staff'}
 ];
+const DEMO_CUSTOMERS=[
+ {id:'demo-kund',name:'Kund',company:'Exempel AB',email:'kund@starenborg.se',password:'demo',role:'customer'}
+];
+const OMNIO_CUSTOMER_URL='';
+function openOmnioCustomer(){
+ if(!OMNIO_CUSTOMER_URL)return false;
+ location.assign(OMNIO_CUSTOMER_URL);
+ return true;
+}
 function demoSession(){
  try{return JSON.parse(sessionStorage.getItem('starenborg-demo-user')||'null');}catch(e){return null;}
 }
@@ -610,13 +624,20 @@ async function portalLogin(e){
  const email=String(f.get('email')||'').trim().toLowerCase();
  const password=String(f.get('password')||'');
  const account=DEMO_ACCOUNTS.find(item=>item.email===email&&item.password===password);
+ const customer=DEMO_CUSTOMERS.find(item=>item.email===email&&item.password===password);
+ if(customer){
+  if(!openOmnioCustomer())statusMessage('Kundkontot ska öppnas i Omnio. Adressen till det riktiga kundkontot är inte inlagd ännu.');
+  return;
+ }
  if(account){
-  sessionStorage.setItem('starenborg-demo-user',JSON.stringify({id:account.id,email:account.email,name:account.name,demo:true}));
+  sessionStorage.setItem('starenborg-demo-user',JSON.stringify({id:account.id,email:account.email,name:account.name,role:account.role,demo:true}));
   portalTab='inkorg';activeMailboxId=null;openMessageId=null;await renderPortal();return;
  }
  const {error}=await db().auth.signInWithPassword({email,password});
  if(error){statusMessage('Inloggning misslyckades: '+error.message);return;}
- await refreshAdminSession();await renderPortal();
+ await refreshAdminSession();
+ if(window.MALARDALA_AUTH.user&&!window.MALARDALA_AUTH.isAdmin){if(openOmnioCustomer())return;}
+ await renderPortal();
 }
 function renderContentEditor(pane){
  const page=CONTENT_PAGES.includes(portalClientId)?portalClientId:'hem';portalClientId=page;
@@ -752,16 +773,19 @@ window.addEventListener('load',()=>{loadSiteSettings();loadEditableContent();});
 <script>
 (function(){
  function updateDepartmentFade(){
-  const copy=document.querySelector("#content > .department-scroll-copy");
   const heading=document.querySelector("#content > .pagehead");
-  if(!copy || !heading)return;
-  const offset=heading.getBoundingClientRect().bottom-copy.getBoundingClientRect().top;
-  copy.style.setProperty("--fade-start",Math.max(-72,offset)+"px");
+  if(!heading)return;
+  document.querySelectorAll("#content > .department-scroll-copy, #content:has(#portal-app) > .section").forEach(copy=>{
+   const portal=copy.matches("#content > .section");
+   const band=portal?110:72;
+   const offset=heading.getBoundingClientRect().bottom-copy.getBoundingClientRect().top+(portal?18:0);
+   copy.style.setProperty("--fade-start",Math.max(-band,offset)+"px");
+  });
  }
  function positionDepartmentIntro(){
   const hero=document.querySelector("#content:has(.department-scroll-copy) > .hero");
   const title=document.querySelector(".department-scroll-copy .hero-title");
-  if(!hero || !title)return;
+  if(!hero || !title){updateDepartmentFade();return;}
   title.style.removeProperty("--department-title-size");
   const line=document.createRange();
   line.selectNodeContents(title);

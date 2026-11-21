@@ -511,6 +511,10 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  -webkit-mask:linear-gradient(to bottom,transparent,#000 72px) bottom / 100% calc(100% - var(--fade-start,-72px)) no-repeat;
  mask:linear-gradient(to bottom,transparent,#000 72px) bottom / 100% calc(100% - var(--fade-start,-72px)) no-repeat;
 }
+#content:has(#portal-app) > .section{
+ -webkit-mask:linear-gradient(to bottom,transparent,#000 110px) bottom / 100% calc(100% - var(--fade-start,-110px)) no-repeat;
+ mask:linear-gradient(to bottom,transparent,#000 110px) bottom / 100% calc(100% - var(--fade-start,-110px)) no-repeat;
+}
 
 
 
@@ -672,6 +676,20 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content:has(.hero-backdrop) .section.contact-layout .booking-grid > span,
 #content:has(.hero-backdrop) .section.contact-layout .booking-toolbar strong{
  color:#071a25!important;
+ text-shadow:none!important;
+}
+#content #portal-app .portal-box :is(h2,h3,h4,p,li,span,strong,small,label,a,div){
+ color:#071a25!important;
+ text-shadow:none!important;
+ line-height:1.55;
+}
+#content #portal-app .portal-box p{
+ margin:0 0 12px;
+}
+#content #portal-app .mailbox-list button[aria-pressed=true],
+#content #portal-app .mailbox-list button[aria-pressed=true] :is(strong,small,span),
+#content #portal-app .inbox-toolbar button[aria-pressed=true]{
+ color:#e6c49a!important;
  text-shadow:none!important;
 }
 

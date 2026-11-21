@@ -163,7 +163,7 @@ body{background:#0b202b!important}
 @media(min-width:801px){
  #content{padding-top:calc(52px + clamp(68px,7.4vw,100px))}
  #content > .pagehead{
-  position:fixed;inset:calc(var(--desktop-header-height) + 52px) 0 auto;
+  position:fixed;z-index:4;inset:calc(var(--desktop-header-height) + 52px) 0 auto;
  }
  #content > .pagehead h1{font-size:clamp(2.95rem,4.45vw,4.5rem)!important}
 
