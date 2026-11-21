@@ -1,0 +1,39 @@
+STARENBORG – APP OCH KUNDPORTAL
+
+Appen loggar in mot samma Supabase-projekt som webbplatsen.
+Administratören skapar kundens inloggning i Supabase Auth och
+kopplar användarens ID till rätt företag under Kundportal → Kunder.
+Kunden använder samma e-post och lösenord i appen och på webben.
+
+1. Välj Starenborg_SDK58 för Android med Expo Go 58.
+   För iPhone med Expo Go 54 väljer du Starenborg_SDK54.
+2. Om du redan har ett fungerande EAS-projekt, kopiera App.js,
+   portalApi.js, portalConfig.js, package.json och package-lock.json
+   från rätt SDK-mapp till ditt befintliga projekt. Behåll ditt
+   befintliga app.json och eas.json med Expo-koppling och signering.
+3. Öppna PowerShell i appmappen. Kör npm.cmd ci och npm.cmd start.
+4. Webbfilen finns i webb/Starenborg_exempel.html. Publicera den
+   på webbhotellet när du vill byta webbportalens fliknamn till
+   Underlag. Den gamla webbversionen visar samma filer under Dokument.
+5. Logga in med ett kundtestkonto i appen. Skicka en provbild och en
+   prov-PDF. Logga in med samma konto i webbläsaren, öppna Kundportal
+   och kontrollera att båda filerna syns och går att ladda ner.
+6. Kontrollera med ett testkonto för ett annat kundföretag att det
+   bara kan se sina egna underlag. Kontrollera även att Andreas och
+   Jessica ser filerna under rätt kund i adminvyn.
+
+Backendens bucket customer-documents ska vara privat. Kontrollera
+att RLS är aktivt på customers, customer_members och customer_documents
+samt att lagringsreglerna endast ger rätt företag eller admin åtkomst.
+Appen använder endast webbplatsens publika projektnyckel och kundens
+egen inloggning. Testa med övningsfiler före riktiga kundunderlag.
+Filstorlek är högst 15 MB per fil, enligt portalens lagringsgräns.
+
+För en uppdaterad APK bygg igen i befintlig SDK58-mapp:
+  $env:EAS_NO_VCS = "1"
+  npx.cmd eas-cli@latest build --platform android --profile preview
+Använd samma EAS-projekt och Android-signaturnyckel som förra gången.
+
+Appen öppnar på inloggningen. Slå på Håll mig inloggad
+för att hoppa över inloggningen nästa gång. Logga ut
+för att ta bort den sparade sessionen från telefonen.
