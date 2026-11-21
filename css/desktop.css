@@ -184,7 +184,22 @@ body{background:#0b202b!important}
  #content > .hero-home{height:max(190px,calc(100svh - var(--desktop-header-height) - 52px))}
 }
 
-@media(min-width:801px){#content:has(> .contact-layout){padding-top:62px}}
+@media(min-width:801px){
+ #content:has(> .contact-layout){
+  height:calc(100svh - var(--desktop-header-height));
+  padding-top:58px!important;box-sizing:border-box;overflow:hidden;
+ }
+ #content > .contact-layout{height:100%;padding:8px 14px 14px!important;background:transparent!important}
+ #content .section.contact-layout > .shell{height:100%}
+ #content .contact-layout > .shell > section{height:100%}
+}
+#content:has(.hero-backdrop) .about-story.section .intro-box :is(h2,p,span.eyebrow,div){
+ color:#071a25!important;text-shadow:none!important;
+}
+#content:has(.hero-backdrop) .contact-layout,
+#content:has(.hero-backdrop) .contact-layout :is(h2,p,label,legend,strong){
+ color:#071a25!important;text-shadow:none!important;
+}
 #content .pinstripe-panel.intro-box,
 #content .about-story > .shell.intro-box,
 #content .monthly-panel.intro-box,
@@ -196,6 +211,18 @@ body{background:#0b202b!important}
 }
 #content .pinstripe-panel.intro-box :is(h2,p,li,span.eyebrow,.lead),
 #content .intro-box :is(h2,p,li,span.eyebrow,.lead,.division-intro){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
+#content .about-story > .shell.intro-box{background:rgba(255,248,240,.96)!important}
+#content:has(.hero-backdrop) :is(.division-section,.monthly-news,.section) > .shell .intro-box :is(h1,h2,h3,p,span,li,strong,small,div),
+#content:has(.hero-backdrop) :is(.division-section,.monthly-news,.section) > .shell.intro-box :is(h1,h2,h3,p,span,li,strong,small,div){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
+#content:has(.hero-backdrop) .section.contact-layout > .shell :is(h2,p,label,legend,strong),
+#content:has(.hero-backdrop) .section.contact-layout .booking-grid > span,
+#content:has(.hero-backdrop) .section.contact-layout .booking-toolbar strong{
  color:#071a25!important;
  text-shadow:none!important;
 }

@@ -3,24 +3,32 @@
   <link rel="stylesheet" href="css/mobile.css">
 </head><body data-page="hem"><header id="header"></header><div id="pagehead"></div><main id="content"></main><footer id="footer"></footer>
 <script>
-const meetingTopics=["Transport","Bygg","Hästar"];
+const meetingHelp=["Rådgivning","Bokföring","Årsbokslut","Moms"];
 const localDate=(d)=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
 const swedishDate=new Intl.DateTimeFormat("sv-SE",{dateStyle:"long",timeZone:"Europe/Stockholm"});
 const stockholmToday=()=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Stockholm"}).format(new Date());
-function contactFields(booking){
+function messageFields(){
  return `<label>Namn<input name="name" required maxlength="120" autocomplete="name"></label>
  <label>E-post<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
- <fieldset class="topic-options"><legend>Vad gäller det?</legend>${meetingTopics.map(topic=>`<label><input type="checkbox" name="topic" value="${topic}"> ${topic}</label>`).join("")}</fieldset>
- <label>${booking?"Meddelande (valfritt)":"Meddelande"}<textarea name="message" rows="4" maxlength="3000" ${booking?"":"required"}></textarea></label>
+ <label class="message-label">Meddelande<textarea name="message" maxlength="3000" required></textarea></label>
  <label class="contact-trap" aria-hidden="true">Webbplats<input name="website" tabindex="-1" autocomplete="off"></label>`;
 }
 function contactPage(){
+ const topics=meetingHelp.map(topic=>`<label><input type="checkbox" name="topic" value="${topic}"> ${topic}</label>`).join("");
  return `<section class="section contact-layout"><div class="shell">
- <section><h2>Skicka ett meddelande</h2><form id="contactForm">${contactFields(false)}<button class="btn">Skicka meddelande</button><p role="status"></p></form></section>
- <section><h2>Boka möte</h2><p>Gröna dagar går att boka.</p>
+ <section class="contact-message"><h2>Skicka ett meddelande</h2><form id="contactForm">${messageFields()}<button class="btn">Skicka meddelande</button><p role="status"></p></form></section>
+ <section class="contact-meeting"><h2>Boka möte</h2><form id="bookingForm">
+ <fieldset class="topic-options"><legend>Boka möte för att få hjälp med:</legend>${topics}</fieldset>
  <div class="booking-toolbar"><button type="button" id="prevMonth" aria-label="Föregående månad">‹</button><strong id="bookingMonth"></strong><button type="button" id="nextMonth" aria-label="Nästa månad">›</button></div>
- <div class="booking-grid" id="bookingDays" aria-label="Bokningskalender"></div><p id="calendarStatus" role="status"></p>
- <form id="bookingForm" hidden><p id="selectedMeeting"></p>${contactFields(true)}<button class="btn">Boka möte</button><p role="status"></p></form></section>
+ <div class="booking-grid" id="bookingDays" aria-label="Bokningskalender"></div>
+ <p id="calendarStatus"></p>
+ <div id="bookingDetails" hidden>
+ <p id="availablePerson"></p>
+ <label>Namn<input name="name" required maxlength="120" autocomplete="name"></label>
+ <label>E-post<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
+ <label>Meddelande (valfritt)<textarea name="message" maxlength="3000" rows="2"></textarea></label>
+ <button class="btn">Boka möte</button><p role="status"></p>
+ </div></form></section>
  </div></section>`;
 }
 async function contactRequest(action,data={}){
@@ -38,35 +46,50 @@ function initContactPage(){
  const calendar=document.getElementById("bookingDays");
  if(!calendar)return;
  const booking=document.getElementById("bookingForm"), status=document.getElementById("calendarStatus");
+ const details=document.getElementById("bookingDetails"), personLine=document.getElementById("availablePerson");
  const [year,monthNumber]=stockholmToday().split("-").map(Number);
  let month=new Date(year,monthNumber-1,1), selected="", request=0;
+ function openDay(date,person,button){
+  calendar.querySelector('[aria-pressed="true"]')?.setAttribute("aria-pressed","false");
+  button.setAttribute("aria-pressed","true");
+  selected=date;
+  details.hidden=false;
+  personLine.textContent=person+" är tillgänglig "+swedishDate.format(new Date(date+"T12:00:00Z"))+".";
+  booking.elements.name.focus();
+ }
  async function showMonth(){
   const id=++request;
-  booking.hidden=true;selected="";
+  details.hidden=true;selected="";personLine.textContent="";
   const start=localDate(month);
   document.getElementById("bookingMonth").textContent=month.toLocaleDateString("sv-SE",{year:"numeric",month:"long"});
   calendar.innerHTML="Mån Tis Ons Tor Fre Lör Sön".split(" ").map(d=>`<span>${d}</span>`).join("");
   status.textContent="Hämtar bokningsbara dagar…";
   let days=[], loadError="";
-  try{days=(await contactRequest("days",{month:start})).days}catch(error){loadError=error.message}
+  try{days=(await contactRequest("days",{month:start})).days||[]}catch(error){loadError=error.message}
   if(id!==request || !calendar.isConnected)return;
-  status.textContent=loadError || (days.length?"":"Inga bokningsbara dagar den här månaden.");
+  const open=new Map(days.map(entry=>typeof entry==="string"?[entry,"Jessica"]:[entry.day||entry.date, entry.person||entry.advisor||entry.name||"Jessica"]));
+  if(loadError){
+   const today=stockholmToday();
+   const last=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
+   for(let day=1;day<=last;day++){
+    const date=localDate(new Date(month.getFullYear(),month.getMonth(),day));
+    const weekday=new Date(month.getFullYear(),month.getMonth(),day).getDay();
+    if(date>=today && weekday!==0 && weekday!==6)open.set(date,"Jessica");
+   }
+  }
+  status.textContent=open.size?"":"Inga bokningsbara dagar den här månaden.";
   for(let i=0;i<(month.getDay()+6)%7;i++)calendar.append(document.createElement("span"));
   const count=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
   for(let day=1;day<=count;day++){
    const date=localDate(new Date(month.getFullYear(),month.getMonth(),day));
-   const available=days.includes(date);
+   const person=open.get(date);
    const button=document.createElement("button");
-   button.type="button";button.textContent=day;button.disabled=!available;
-   button.className="booking-day"+(available?" available":"");
-   button.setAttribute("aria-label",swedishDate.format(new Date(date+"T12:00:00Z"))+(available?", bokningsbar":""));
+   button.type="button";button.disabled=!person;
+   button.className="booking-day"+(person?" available":"");
+   button.innerHTML=`<span class="day-num">${day}</span>${person?'<span class="day-open" aria-hidden="true"></span>':""}`;
+   button.setAttribute("aria-label",swedishDate.format(new Date(date+"T12:00:00Z"))+(person?", ledig tid, "+person+" är tillgänglig":""));
    button.setAttribute("aria-pressed","false");calendar.append(button);
-   button.onclick=()=>{
-    calendar.querySelector('[aria-pressed="true"]')?.setAttribute("aria-pressed","false");
-    button.setAttribute("aria-pressed","true");selected=date;booking.hidden=false;
-    document.getElementById("selectedMeeting").textContent="Vald dag: "+swedishDate.format(new Date(date+"T12:00:00Z"));
-    booking.elements.name.focus();
-   };
+   if(person)button.onclick=()=>openDay(date,person,button);
   }
  }
  function changeMonth(amount){month=new Date(month.getFullYear(),month.getMonth()+amount,1);showMonth()}
@@ -76,9 +99,10 @@ function initContactPage(){
   form.onsubmit=async(event)=>{
    event.preventDefault();
    const fields=new FormData(form), output=form.querySelector("[role=status]");
-   const submit=form.querySelector("button");
+   const submit=form.querySelector("button.btn");
    const data=Object.fromEntries(fields);data.topics=fields.getAll("topic");data.date=selected;
-   if(form===booking && !data.topics.length){output.textContent="Välj minst en avdelning.";return}
+   if(form===booking && !selected){output.textContent="Välj ett datum med ledig tid.";return}
+   if(form===booking && !data.topics.length){output.textContent="Välj minst ett alternativ.";return}
    submit.disabled=true;output.textContent="Skickar…";
    try{
     const result=await contactRequest(form===booking?"book":"contact",data);form.reset();

@@ -320,27 +320,41 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 .division-grid>.division-card .division-icon{height:30px!important;min-height:30px!important;flex:0 0 30px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:29px!important;line-height:1!important}.division-grid>.division-card .division-icon svg{width:29px!important;height:29px!important;min-width:29px!important;min-height:29px!important;max-width:29px!important;max-height:29px!important;stroke-width:2.4!important}.division-grid>.division-card{min-width:0!important;box-sizing:border-box!important}
 
 
-#content .contact-layout > .shell{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;
- justify-content:space-between;gap:clamp(64px,14vw,220px);
- width:min(1560px,100%);max-width:none;
+#content .section.contact-layout > .shell{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;
+ gap:22px;width:min(1560px,100%);max-width:none;
  padding-inline:clamp(14px,2.5vw,42px)!important;
+ background:transparent!important;border-radius:0!important;box-shadow:none!important;
 }
-.contact-layout form{display:grid;gap:12px}
-.contact-layout input:not([type=checkbox]),.contact-layout textarea{width:100%;padding:9px;border:1px solid #c9aa80;border-radius:6px;font:inherit}
-.contact-layout label{display:block}
-.contact-layout .topic-options{border:1px solid #c9aa80;padding:10px 14px}
-.contact-layout .topic-options label{display:inline-block;margin-right:12px}
-.booking-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0}
-.booking-toolbar button,.booking-day{border:1px solid #c9aa80;border-radius:5px;background:#071a25;color:#fff8ec;padding:7px;min-height:36px;font:inherit}
+.contact-layout > .shell > section{
+ display:flex;flex-direction:column;min-height:0;
+ background:rgba(255,248,240,.9);color:#071a25;border-radius:16px;
+ padding:clamp(16px,2vw,28px);
+}
+.contact-layout h2{margin:0 0 10px;color:#071a25}
+.contact-layout form{display:flex;flex-direction:column;gap:10px;min-height:0;flex:1}
+.contact-layout input:not([type=checkbox]),.contact-layout textarea{width:100%;padding:9px;border:1px solid #c9aa80;border-radius:6px;font:inherit;background:#fff;color:#071a25}
+.contact-layout label{display:block;color:#071a25}
+.contact-message form{flex:1}
+.contact-message .message-label{display:flex;flex-direction:column;flex:1;min-height:0}
+.contact-message textarea{flex:1;min-height:0;resize:none}
+.contact-layout .topic-options{border:1px solid #c9aa80;border-radius:8px;padding:8px 12px;margin:0}
+.contact-layout .topic-options legend{color:#071a25;padding:0 6px}
+.contact-layout .topic-options label{display:inline-flex;align-items:center;gap:6px;margin:4px 12px 4px 0}
+.booking-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0}
+.booking-toolbar button,.booking-day{border:1px solid #c9aa80;border-radius:5px;background:#071a25;color:#fff8ec;padding:7px;min-height:0;font:inherit}
 .booking-toolbar button,.booking-day:not(:disabled){cursor:pointer}
-.booking-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
-.booking-day.available{background:#236342;border-color:#7cc79d}
-.booking-day[aria-pressed=true]{outline:2px solid #fff8ec;outline-offset:1px}
-.booking-day:disabled{opacity:.6}
+.booking-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto repeat(6,minmax(28px,1fr));gap:4px;text-align:center;flex:1;min-height:250px}
+.booking-day{position:relative;display:flex;align-items:center;justify-content:center;height:100%;padding:2px 2px 8px}
+.booking-day .day-open{position:absolute;left:7px;right:7px;bottom:4px;height:4px;border-radius:99px;background:#3dce7a;pointer-events:none}
+.booking-day.available{background:#16382a;border-color:#7cc79d}
+.booking-day[aria-pressed=true]{outline:2px solid #071a25;outline-offset:1px}
+.booking-day:disabled{opacity:.45}
+#availablePerson{margin:0;font-weight:700;color:#071a25}
+#bookingDetails{display:grid;gap:6px}
+#bookingDetails textarea{height:52px;resize:none}
+#bookingDetails[hidden]{display:none}
 .contact-trap{position:absolute;left:-100vw}
-#bookingForm{margin-top:16px}
-#bookingForm[hidden]{display:none}
 
 
 
@@ -621,6 +635,24 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
  box-shadow:none!important;
 }
 #content .division-section .division-card :is(h2,p,.division-link){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
+#content:has(.hero-backdrop) .about-story.section .intro-box :is(h2,p,span.eyebrow,div){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
+#content .about-story > .shell.intro-box{
+ background:rgba(255,248,240,.94)!important;
+}
+#content:has(.hero-backdrop) :is(.division-section,.monthly-news,.section) > .shell .intro-box :is(h1,h2,h3,p,span,li,strong,small,div),
+#content:has(.hero-backdrop) :is(.division-section,.monthly-news,.section) > .shell.intro-box :is(h1,h2,h3,p,span,li,strong,small,div){
+ color:#071a25!important;
+ text-shadow:none!important;
+}
+#content:has(.hero-backdrop) .section.contact-layout > .shell :is(h2,p,label,legend,strong),
+#content:has(.hero-backdrop) .section.contact-layout .booking-grid > span,
+#content:has(.hero-backdrop) .section.contact-layout .booking-toolbar strong{
  color:#071a25!important;
  text-shadow:none!important;
 }
