@@ -87,11 +87,6 @@
     -webkit-backdrop-filter: blur(8px);
   }
 
-  /* Space for fixed logo + department buttons */
-  #content {
-    padding-top: calc(var(--mobile-header-height) + var(--mobile-nav-height)) !important;
-  }
-
   .hero-nav a {
     pointer-events: auto !important;
     display: flex !important;
@@ -136,6 +131,7 @@
   #content {
     position: relative;
     background: transparent !important;
+    padding-top: calc(var(--mobile-header-height) + var(--mobile-nav-height)) !important;
   }
 
   #content .hero-copy,
