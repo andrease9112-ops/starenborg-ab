@@ -1,8 +1,8 @@
 /* Mobile + tablet only. Desktop styles live in desktop.css — do not change that file. */
 @media (max-width: 800px) {
   :root {
-    --mobile-header-height: 88px;
-    --mobile-nav-height: 96px;
+    --mobile-header-height: 64px;
+    --mobile-nav-height: 72px;
   }
 
   html {
@@ -46,8 +46,8 @@
 
   #header .starenborg-logo {
     width: auto !important;
-    height: 68px !important;
-    max-width: min(92vw, 360px) !important;
+    height: 48px !important;
+    max-width: min(70vw, 260px) !important;
     object-fit: contain !important;
   }
 
@@ -65,6 +65,7 @@
     display: none !important;
   }
 
+  /* Float over the hero (like desktop) so the horse stays visible */
   #content > .hero-nav,
   .hero-nav {
     position: fixed !important;
@@ -74,17 +75,17 @@
     bottom: auto !important;
     z-index: 35 !important;
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
-    padding: 10px 12px 12px !important;
+    gap: 4px !important;
+    padding: 6px 8px !important;
     margin: 0 !important;
-    pointer-events: auto !important;
-    background: rgba(7, 26, 37, 0.96) !important;
-    border-bottom: 1px solid rgba(174, 151, 115, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .hero-nav a {
@@ -92,30 +93,33 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 1 1 calc(33.33% - 8px);
-    min-width: 96px !important;
-    max-width: 140px;
-    min-height: 40px !important;
-    padding: 8px 10px !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 0 7px !important;
     border: 0 !important;
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     background: rgba(7, 26, 37, 0.55) !important;
     color: #f4dfbf !important;
     text-decoration: none !important;
-    font: 700 13px Arial, sans-serif !important;
+    font: 700 10px Arial, sans-serif !important;
     box-shadow: none !important;
+    white-space: nowrap !important;
   }
 
   .hero-nav a[aria-current="page"] {
-    background: rgba(7, 26, 37, 0.88) !important;
+    background: rgba(7, 26, 37, 0.8) !important;
     box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.35) !important;
   }
 
   .hero-nav a.portal-link {
     background: #e6c49a !important;
     color: #0b202b !important;
-    flex: 1 1 100%;
-    max-width: 220px;
+    flex: 0 0 auto !important;
+    padding: 0 9px !important;
+    font-size: 10px !important;
   }
 
   /* Match desktop home: hide the big division card grid */
@@ -277,7 +281,16 @@
   }
 
   #content > .hero-home {
-    height: clamp(240px, 55svh, 520px);
+    height: clamp(320px, calc(100svh - var(--mobile-header-height)), 640px);
+  }
+
+  #content:has(> .hero-home) {
+    padding-top: var(--mobile-header-height) !important;
+  }
+
+  /* Nav sits on top of the horse image, not in a solid bar */
+  #content:has(> .hero-home) > .hero-nav {
+    top: calc(var(--mobile-header-height) + 6px) !important;
   }
 
   #content > .hero img,
@@ -321,18 +334,23 @@
 
 @media (max-width: 390px) {
   :root {
-    --mobile-header-height: 80px;
-    --mobile-nav-height: 100px;
+    --mobile-header-height: 56px;
+    --mobile-nav-height: 64px;
   }
 
   #header .starenborg-logo {
-    height: 60px !important;
+    height: 42px !important;
   }
 
   .hero-nav a {
-    font-size: 12px !important;
-    min-width: 84px !important;
-    padding: 7px 6px !important;
+    font-size: 9px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    padding: 0 5px !important;
+  }
+
+  .hero-nav a.portal-link {
+    padding: 0 7px !important;
   }
 
   #content > .pagehead h1 {
