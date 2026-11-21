@@ -1,8 +1,7 @@
-/* Mobile + tablet only. Do not edit desktop.css for phone layout. */
+/* Mobile + tablet only. Desktop styles live in desktop.css — do not change that file. */
 @media (max-width: 800px) {
   :root {
     --mobile-header-height: 88px;
-    --mobile-subnav-offset: 88px;
   }
 
   html {
@@ -15,7 +14,7 @@
     padding-top: 0;
   }
 
-  /* —— Sticky logo bar (fixed height so subnav offset stays correct) —— */
+  /* —— Sticky logo —— */
   #header {
     position: sticky;
     top: 0;
@@ -54,16 +53,71 @@
   }
 
   /*
-   * Mobile department picker = home page cards (stacked cream cards).
-   * Hide the horizontal Transport/Hästar/Bygg strip + Kundportal bar on
-   * department pages — that chrome is desktop-only via .hero-nav.
+   * Same as desktop: locked department buttons under the logo.
+   * Use .hero-nav (not the icon subnav / home cards).
    */
   #content > .subnav-wrap {
     display: none !important;
   }
 
+  #content > .hero-nav,
   .hero-nav {
+    position: sticky !important;
+    top: var(--mobile-header-height) !important;
+    inset: auto !important;
+    z-index: 35 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 10px 12px 12px !important;
+    margin: 0 !important;
+    pointer-events: auto !important;
+    background: rgba(7, 26, 37, 0.96) !important;
+    border-bottom: 1px solid rgba(174, 151, 115, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .hero-nav a {
+    pointer-events: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 1 calc(33.33% - 8px);
+    min-width: 96px !important;
+    max-width: 140px;
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: rgba(7, 26, 37, 0.55) !important;
+    color: #f4dfbf !important;
+    text-decoration: none !important;
+    font: 700 13px Arial, sans-serif !important;
+    box-shadow: none !important;
+  }
+
+  .hero-nav a[aria-current="page"] {
+    background: rgba(7, 26, 37, 0.88) !important;
+    box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.35) !important;
+  }
+
+  .hero-nav a.portal-link {
+    background: #e6c49a !important;
+    color: #0b202b !important;
+    flex: 1 1 100%;
+    max-width: 220px;
+  }
+
+  /* Match desktop home: hide the big division card grid */
+  #content > .hero-home + .division-section {
     display: none !important;
+  }
+
+  #content > .hero-home + .division-section + .monthly-news {
+    padding-top: 8px !important;
   }
 
   /* —— Shared content look (same language as desktop) —— */
@@ -124,6 +178,7 @@
     margin: 8px 0 18px;
     color: #e6c49a !important;
     white-space: normal !important;
+    text-align: center;
   }
 
   #content .hero-title span {
@@ -187,7 +242,7 @@
 
   #content > .pagehead {
     position: static;
-    padding: 18px 12px 6px !important;
+    padding: 14px 12px 6px !important;
     background: transparent !important;
     border: 0 !important;
   }
@@ -210,150 +265,11 @@
     color: #e6c49a !important;
     font-size: clamp(1.7rem, 7vw, 2.6rem) !important;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    text-align: center;
   }
 
-  /*
-   * Home division cards — beat base.css 5-column chip layout.
-   * Selectors must be at least as specific as:
-   *   .division-section .division-grid
-   *   .division-section .division-grid > .division-card
-   *   .division-section .division-grid > .division-card p
-   */
-  /* Home department cards — same stacked cream cards as the reference home screenshot */
-  #content .division-section {
-    padding: 8px 12px 36px !important;
-  }
-
-  #content .division-section > .shell {
-    width: calc(100% - 24px) !important;
-    max-width: none !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    background: transparent !important;
-  }
-
-  #content .division-section .division-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    grid-auto-flow: row !important;
-    gap: 14px !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 18px 14px !important;
-    border-radius: 18px !important;
-    background: rgba(7, 26, 37, 0.78) !important;
-    justify-content: stretch !important;
-    justify-items: stretch !important;
-    align-items: stretch !important;
-  }
-
-  #content .division-section .division-grid > .division-card,
-  #content .division-section .division-grid > .division-card:nth-child(4),
-  #content .division-section .division-grid > .division-card:nth-child(5) {
-    grid-column: 1 / -1 !important;
-    grid-row: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 10px !important;
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 22px 18px !important;
-    margin: 0 !important;
-    border: 0 !important;
-    border-radius: 16px !important;
-    background: rgba(255, 248, 240, 0.94) !important;
-    color: #071a25 !important;
-    text-align: center !important;
-    overflow: visible !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
-
-  #content .division-section .division-grid > .division-card,
-  #content .division-section .division-grid > .division-card :is(h2, p, span, .division-link) {
-    color: #071a25 !important;
-    text-shadow: none !important;
-  }
-
-  #content .division-section .division-grid > .division-card .division-icon {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    flex: 0 0 auto !important;
-    font-size: 28px !important;
-    color: #8a7048 !important;
-    line-height: 1 !important;
-  }
-
-  #content .division-section .division-grid > .division-card .division-icon svg {
-    display: block !important;
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    min-height: 28px !important;
-    max-width: 28px !important;
-    max-height: 28px !important;
-    margin: 0 auto !important;
-    color: inherit !important;
-  }
-
-  #content .division-section .division-grid > .division-card h2 {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font: 700 clamp(1.2rem, 4.5vw, 1.5rem) / 1.2 Georgia, serif !important;
-    color: #071a25 !important;
-    text-shadow: none !important;
-    white-space: normal !important;
-    text-align: center !important;
-    overflow: visible !important;
-  }
-
-  #content .division-section .division-grid > .division-card p,
-  #content .division-section .division-grid > .division-card .division-link {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    color: #243540 !important;
-    text-shadow: none !important;
-    white-space: normal !important;
-    text-align: center !important;
-  }
-
-  #content .division-section .division-grid > .division-card .division-link {
-    margin-top: 4px !important;
-    font-weight: 700 !important;
-    color: #8a7048 !important;
-  }
-
-  #content .division-section .portal-wide {
-    display: flex !important;
-    width: 100% !important;
-    margin-top: 14px !important;
-    font-size: 15px;
-    gap: 10px;
-  }
-
-  #content .division-section .portal-wide small {
-    font-size: 12px;
-  }
-
-  /* —— Heroes & layouts —— */
   #content > .hero-home {
-    height: clamp(220px, 48svh, 420px);
+    height: clamp(240px, 55svh, 520px);
   }
 
   #content > .hero img,
@@ -383,6 +299,10 @@
   #content:has(.department-scroll-copy) > .hero {
     height: clamp(140px, 32svh, 240px);
   }
+
+  #content .monthly-news > .shell {
+    margin-top: 8px !important;
+  }
 }
 
 @media (max-width: 800px) and (prefers-reduced-motion: reduce) {
@@ -394,17 +314,16 @@
 @media (max-width: 390px) {
   :root {
     --mobile-header-height: 80px;
-    --mobile-subnav-offset: 80px;
   }
 
   #header .starenborg-logo {
     height: 60px !important;
   }
 
-  #content > .subnav-wrap .subnav-choice {
-    font-size: 11px !important;
-    min-height: 40px !important;
-    padding: 6px 2px !important;
+  .hero-nav a {
+    font-size: 12px !important;
+    min-width: 84px !important;
+    padding: 7px 6px !important;
   }
 
   #content > .pagehead h1 {
