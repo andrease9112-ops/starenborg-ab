@@ -1,81 +1,462 @@
-/* Mobile + tablet only. Put phone/tablet layout changes here. */
-@media(max-width:800px){.top-inner{flex-wrap:wrap;padding:15px 0}.menu-btn{display:block;margin-left:auto}.nav{display:none;width:100%;flex-direction:column;align-items:stretch;gap:0;padding-bottom:10px}.nav.open{display:flex}.nav a{padding:12px 4px;border-bottom:1px solid #ffffff1c}.cards{grid-template-columns:1fr}.two{grid-template-columns:1fr}.hero-copy{padding:30px 0 42px}.hero img{max-height:none}.section{padding:42px 0}}
+/* Mobile + tablet only. Desktop styles live in desktop.css — do not mirror changes there. */
+@media (max-width: 800px) {
+  :root {
+    --mobile-header-height: 88px;
+    --mobile-subnav-offset: 88px;
+  }
 
-@media(max-width:800px){.hero-title{font-size:clamp(1.8rem,7.7vw,3.9rem);line-height:1.14;letter-spacing:-.045em;margin:8px 0 28px}}
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media(max-width:390px){.hero-title{font-size:7.4vw}}
+  body {
+    background: #0b202b !important;
+    color: #e6c49a;
+    padding-top: 0;
+  }
 
-@media(max-width:800px){.section .lead{font-size:1.16rem;line-height:1.65}}
+  /* —— Header: sticky logo bar —— */
+  #header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: #071a25;
+  }
 
-@media(max-width:800px){.top-inner .menu-btn{order:-1;margin-left:0;margin-right:10px}.top-inner .brand{margin-right:auto}.top-inner .nav{order:3;text-align:left}}
+  #header .top {
+    background: #071a25;
+  }
 
-@media(max-width:800px){
-.top-inner:has(.menu-btn:first-child){justify-content:flex-start}
-.pagehead{padding:36px 0 42px}
-.pagehead::before{left:12px}.pagehead::after{right:12px}
-.pagehead .shell{text-align:center}
+  #header .top-inner {
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: var(--mobile-header-height);
+    min-height: var(--mobile-header-height);
+    padding: 8px 0;
+    box-sizing: border-box;
+  }
+
+  #header .starenborg-logo {
+    width: auto;
+    height: 68px;
+    max-width: min(92vw, 360px);
+    object-fit: contain;
+  }
+
+  #header .nav {
+    display: none !important;
+  }
+
+  .menu-btn {
+    display: none !important;
+  }
+
+  /* —— Department buttons: locked under the header —— */
+  #content > .subnav-wrap {
+    position: sticky;
+    top: var(--mobile-subnav-offset);
+    z-index: 35;
+    background: rgba(7, 26, 37, 0.96);
+    border-bottom: 1px solid rgba(174, 151, 115, 0.45);
+    padding: 10px 10px 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  #content > .subnav-wrap .subnav {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  #content > .subnav-wrap .subnav-choice {
+    min-width: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 52px;
+    padding: 8px 2px !important;
+    border-radius: 8px !important;
+    border: 0 !important;
+    background: rgba(7, 26, 37, 0.55) !important;
+    color: #f4dfbf !important;
+    font: 700 12px Arial, sans-serif !important;
+    gap: 4px !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  #content > .subnav-wrap .subnav-choice .subnav-symbol,
+  #content > .subnav-wrap .subnav-choice .subnav-symbol svg {
+    font-size: 18px !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: inherit !important;
+  }
+
+  #content > .subnav-wrap .subnav-choice.is-current,
+  #content > .subnav-wrap .subnav-choice[aria-current="page"] {
+    background: rgba(7, 26, 37, 0.88) !important;
+    color: #f4dfbf !important;
+    box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.35) !important;
+    transform: none !important;
+  }
+
+  /* Match desktop: portal is a simple text-style control, not a big card */
+  #content > .subnav-wrap .portal-wide.portal-sub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px auto 0;
+    width: min(100%, 280px);
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #e6c49a;
+    color: #0b202b !important;
+    text-decoration: none;
+    font: 700 14px Arial, sans-serif;
+  }
+
+  #content > .subnav-wrap .portal-wide.portal-sub small,
+  #content > .subnav-wrap .portal-wide.portal-sub .portal-arrow {
+    display: none;
+  }
+
+  #content > .subnav-wrap .portal-wide.portal-sub svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+
+  /* Desktop uses .hero-nav; keep it off on phones/tablets */
+  .hero-nav {
+    display: none !important;
+  }
+
+  /* —— Shared content look (same language as desktop) —— */
+  #content {
+    position: relative;
+    background: transparent !important;
+  }
+
+  #content .hero-copy,
+  #content .section,
+  #content .section.alt,
+  #content .division-section,
+  #content .monthly-news,
+  #content .pagehead {
+    background: transparent !important;
+  }
+
+  #content .section,
+  #content .hero-copy,
+  #content .division-section,
+  #content .monthly-news {
+    padding: 16px 12px !important;
+  }
+
+  #content .hero-copy > .shell,
+  #content .section > .shell,
+  #content .monthly-news > .shell,
+  #content .division-section > .shell {
+    width: min(1120px, calc(100% - 24px)) !important;
+    max-width: 1120px !important;
+    margin: 14px auto !important;
+    padding: 18px !important;
+    border-radius: 16px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: #e6c49a !important;
+  }
+
+  #content :is(.pinstripe-panel, .monthly-panel, .notice) {
+    background: rgba(7, 26, 37, 0.78) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+    color: #e6c49a !important;
+  }
+
+  #content .pinstripe-panel::before,
+  #content .pinstripe-panel::after,
+  #content .pinstripe-panel .corner {
+    display: none !important;
+  }
+
+  #content .hero-title,
+  #content .hero-copy .lead,
+  #content .hero-copy p,
+  #content .section p,
+  #content .division-section p {
+    color: #e6c49a !important;
+  }
+
+  #content .hero-title {
+    font-size: clamp(1.55rem, 6.4vw, 2.6rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em;
+    margin: 8px 0 18px;
+    white-space: normal;
+  }
+
+  #content .hero-title span {
+    display: block;
+    white-space: normal;
+  }
+
+  #content .section .lead {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* Cream intro panels + cards — same as desktop */
+  #content .pinstripe-panel.intro-box,
+  #content .about-story > .shell.intro-box,
+  #content .monthly-panel.intro-box,
+  #content .division-section .intro-box,
+  #content .section .intro-box {
+    background: rgba(255, 248, 240, 0.9) !important;
+    color: #071a25 !important;
+    border-radius: 16px !important;
+    padding: clamp(18px, 4vw, 28px) clamp(14px, 4vw, 28px) !important;
+  }
+
+  #content .intro-box :is(h1, h2, h3, p, li, span.eyebrow, .lead, .division-intro, strong, small, div) {
+    color: #071a25 !important;
+    text-shadow: none !important;
+  }
+
+  #content .section:has(.cards) > .shell {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  #content .section .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    background: rgba(7, 26, 37, 0.78) !important;
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  #content .section .cards > .card {
+    background: rgba(255, 248, 240, 0.9) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+    color: #071a25 !important;
+    padding: 16px !important;
+  }
+
+  #content .section .cards > .card :is(h3, p, li, strong) {
+    color: #071a25 !important;
+    text-shadow: none !important;
+  }
+
+  #content .section a.btn,
+  #content .hero-copy a.btn {
+    color: #0a1a22;
+  }
+
+  /* —— Page titles —— */
+  #content > .pagehead {
+    position: static;
+    padding: 18px 12px 6px !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  #content > .pagehead > .shell {
+    width: calc(100% - 24px) !important;
+    min-height: 0 !important;
+    padding: 8px 12px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  #content > .pagehead > .shell::before,
+  #content > .pagehead > .shell::after {
+    display: none !important;
+  }
+
+  #content > .pagehead h1 {
+    color: #e6c49a !important;
+    font-size: clamp(1.7rem, 7vw, 2.6rem) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  }
+
+  /* —— Home division cards: readable, not tiny icon chips —— */
+  .division-section {
+    padding: 24px 0 36px !important;
+  }
+
+  .division-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .division-section .shell {
+    width: calc(100% - 24px) !important;
+  }
+
+  .division-section .division-grid > .division-card,
+  .division-section .division-grid > .division-card:nth-child(4),
+  .division-section .division-grid > .division-card:nth-child(5) {
+    grid-column: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 20px 18px !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    background: rgba(255, 248, 240, 0.9) !important;
+    color: #071a25 !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  .division-section .division-card .division-icon {
+    height: auto !important;
+    min-height: 0 !important;
+    flex: none !important;
+    font-size: 28px !important;
+    color: #8a7048 !important;
+  }
+
+  .division-section .division-card .division-icon svg {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    color: inherit !important;
+  }
+
+  .division-section .division-card h2 {
+    display: block !important;
+    margin: 0 !important;
+    font: 700 clamp(1.15rem, 4.5vw, 1.45rem) / 1.2 Georgia, serif !important;
+    color: #071a25 !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+
+  .division-section .division-card p {
+    display: block !important;
+    margin: 0 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    color: #243540 !important;
+    white-space: normal !important;
+  }
+
+  .division-section .division-card .division-link {
+    display: inline-block !important;
+    margin-top: 4px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700;
+    color: #6d5634 !important;
+  }
+
+  .portal-wide {
+    width: 100%;
+    margin-top: 14px;
+    font-size: 15px;
+    gap: 10px;
+  }
+
+  .portal-wide small {
+    font-size: 12px;
+  }
+
+  /* —— Heroes & layouts —— */
+  #content > .hero-home {
+    height: clamp(220px, 52svh, 480px);
+  }
+
+  #content > .hero img,
+  #content > .hero-home img {
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .two,
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .inbox {
+    grid-template-columns: 1fr;
+  }
+
+  #content .contact-layout > .shell {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  #content .department-scroll-copy .hero-copy > .shell {
+    width: min(1120px, calc(100% - 24px)) !important;
+    max-width: 1120px !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  #content:has(.department-scroll-copy) > .hero {
+    height: clamp(120px, 28svh, 220px);
+  }
+
+  .hero-backdrop {
+    /* Keep backdrop under sticky chrome */
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .starenborg-mark {
+    width: 40px;
+    height: 32px;
+  }
 }
 
-@media(max-width:650px){.pinstripe-panel{padding:48px 19px 44px}.corner{width:62px;height:62px}.pinstripe-panel .hero-title{font-size:clamp(1.95rem,7vw,3.1rem)}.pinstripe-panel .hero-title span{display:block}.news-entry{grid-template-columns:42px 1fr;gap:14px}.news-num{font-size:1.6rem}.pagehead .shell:before,.pagehead .shell:after{width:45px;height:45px;top:-14px}}
-
-@media(max-width:650px){
-.pagehead{padding:32px 0!important}
-.pagehead .shell{min-height:110px;padding:24px 42px;width:calc(100% - 28px)}
-.pagehead h1{font-size:clamp(1.8rem,7.2vw,2.65rem)!important}
-.pagehead .shell::before,.pagehead .shell::after{width:50px;height:50px}
-.pinstripe-panel{padding:70px 22px!important}
-.pinstripe-panel .corner{width:52px;height:52px}
-.pinstripe-panel .hero-title{font-size:clamp(1.65rem,6.5vw,2.6rem)!important}
-.pinstripe-panel p{font-size:clamp(.95rem,3.8vw,1.12rem)}
+@media (max-width: 800px) and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-@media(max-width:650px){
-.pagehead{background-size:min(260px,70%) auto;background-position:center 8px;padding-top:90px!important}
-.pagehead .shell{padding:20px 46px!important;min-height:95px}
-.pagehead .shell::before,.pagehead .shell::after{width:52px!important;height:52px!important}
-.pinstripe-panel{padding:100px 24px 100px!important}
-.pinstripe-panel::before,.pinstripe-panel::after{height:88px;width:78%}
-.pinstripe-panel .corner{width:60px;height:60px}
-}
+/* Slightly tighter sticky chrome on very small phones */
+@media (max-width: 390px) {
+  :root {
+    --mobile-header-height: 80px;
+    --mobile-subnav-offset: 80px;
+  }
 
-@media(max-width:650px){.pagehead{padding:22px 0!important}.pagehead .shell{min-height:100px!important;padding:25px 40px!important}.pagehead .shell::before,.pagehead .shell::after{width:29px!important;height:29px!important}.pinstripe-panel{padding:60px 24px!important}.pinstripe-panel .corner{width:28px!important;height:28px!important}}
+  #header .starenborg-logo {
+    height: 60px;
+  }
 
-@media(max-width:800px){.hero-title span{white-space:normal}}
+  #content > .subnav-wrap .subnav-choice {
+    font-size: 11px !important;
+    min-height: 48px;
+    padding: 6px 1px !important;
+  }
 
-@media(max-width:760px){.division-grid{grid-template-columns:1fr}.division-section{padding:42px 0}.division-card{min-height:0;padding:24px}}
-
-@media(max-width:500px){.division-section .eyebrow{font-size:.65rem}.division-card{border-width:1px!important}.division-card p{font-size:11px!important}.division-card h2{font-size:16px!important}.division-link{font-size:11px!important}}
-
-@media(max-width:420px){.division-section .division-icon svg{width:29px;height:29px}.division-section .division-card{border-radius:9px}}
-
-@media(max-width:760px){.division-section .shell{width:calc(100% - 20px)!important}.division-section .division-card{padding:12px 5px!important}.division-section .division-card h2{font-size:clamp(15px,4vw,22px)!important}.division-section .division-card p{font-size:clamp(10px,2.6vw,14px)!important}}
-
-@media(max-width:500px){.division-section .shell{width:calc(100% - 20px)}.division-section .division-card{border-radius:9px}}
-
-@media(max-width:480px){.division-section{padding:38px 0 52px!important}.division-section .division-grid{max-width:390px!important}.division-section .division-grid>.division-card{border-radius:9px!important}}
-
-@media(max-width:430px){.subnav{gap:6px}.subnav-choice{flex:0 1 calc((100% - 12px)/3);font-size:12px;padding:9px 4px}}
-
-@media(max-width:600px){.division-section .division-card p{display:none!important}.division-section .division-card{min-height:95px!important}.division-section .division-grid{gap:5px!important}.division-section .division-card h2{font-size:clamp(10px,2.7vw,15px)!important}}
-
-@media(max-width:420px){.division-section .division-grid{gap:4px!important}.division-section .division-grid>.division-card{height:63px!important;min-height:63px!important}.division-section .division-icon svg{width:22px!important;height:22px!important}}
-
-@media(max-width:390px){.division-section .shell{width:calc(100% - 16px)!important}.division-section .division-grid{gap:3px!important}.division-section .division-grid > .division-card h2{font-size:9px!important}}
-
-@media(max-width:520px){.portal-wide{width:calc(100% - 28px);font-size:13px;gap:7px}.portal-wide small{font-size:10px}.portal-wide svg{width:18px;height:18px}}
-
-@media(max-width:560px){.starenborg-mark{width:42px;height:34px}.brand{gap:5px}}
-
-@media(max-width:700px){#header .starenborg-logo{width:min(94vw,520px)}#header .top-inner{justify-content:center}}
-
-@media(max-width:600px){.division-grid>.division-card .division-icon{height:25px!important;min-height:25px!important;flex-basis:25px!important;font-size:24px!important}.division-grid>.division-card .division-icon svg{width:25px!important;height:25px!important;min-width:25px!important;min-height:25px!important;max-width:25px!important;max-height:25px!important}}
-
-@media(max-width:800px){
- #content .contact-layout > .shell{grid-template-columns:1fr;gap:40px}
-}
-
-@media(max-width:800px){
- #content > .hero-home{height:clamp(260px,62svh,600px)}
- #header .starenborg-logo{width:min(96vw,560px)}
- .inbox{grid-template-columns:1fr}
+  #content > .pagehead h1 {
+    font-size: clamp(1.45rem, 7.2vw, 2.1rem) !important;
+  }
 }
