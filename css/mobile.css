@@ -313,6 +313,10 @@
     height: clamp(160px, 36svh, 280px) !important;
   }
 
+  /*
+   * contain = whole photo visible (horse + truck + excavator, etc.)
+   * Same on every phone/tablet — no subject cropped away.
+   */
   #content > .hero > img,
   #content > .hero-home > img {
     display: block !important;
@@ -320,8 +324,9 @@
     height: 100% !important;
     max-height: none !important;
     margin: 0 !important;
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center center !important;
+    background: #071a25 !important;
   }
 
   #content > .hero:not(.hero-home) > img {
@@ -330,11 +335,9 @@
 
   #content > .hero-home > img {
     opacity: 1 !important;
-    /* Horse sits left — keep head+shoulders in the mobile frame */
-    object-position: 22% 30% !important;
   }
 
-  /* Backdrop starts under chrome so it never sits behind the buttons */
+  /* Backdrop: full motif visible under chrome on all public pages */
   #content > .hero-backdrop {
     position: fixed !important;
     top: var(--mobile-chrome) !important;
@@ -343,34 +346,15 @@
     left: 0 !important;
     z-index: -1 !important;
     overflow: hidden !important;
+    background: #071a25 !important;
   }
 
   #content > .hero-backdrop > img {
     display: block !important;
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
-    object-position: center 32% !important;
-  }
-
-  #content:has(.hero-home) > .hero-backdrop > img,
-  #content:has(img[src*="home-hero"]) > .hero-backdrop > img {
-    object-position: 22% 30% !important;
-  }
-
-  #content:has(img[src*="transport-hero"]) > .hero-backdrop > img,
-  #content > .hero > img[src*="transport-hero"] {
-    object-position: 58% 35% !important;
-  }
-
-  #content:has(img[src*="hastar-hero"]) > .hero-backdrop > img,
-  #content > .hero > img[src*="hastar-hero"] {
-    object-position: 22% 28% !important;
-  }
-
-  #content:has(img[src*="bygg-hero"]) > .hero-backdrop > img,
-  #content > .hero > img[src*="bygg-hero"] {
-    object-position: 62% 36% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
   }
 
   #content > .hero-home > .pagehead {
