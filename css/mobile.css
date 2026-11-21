@@ -1,4 +1,4 @@
-/* Mobile + tablet only. Desktop styles live in desktop.css — do not mirror changes there. */
+/* Mobile + tablet only. Do not edit desktop.css for phone layout. */
 @media (max-width: 800px) {
   :root {
     --mobile-header-height: 88px;
@@ -15,51 +15,52 @@
     padding-top: 0;
   }
 
-  /* —— Header: sticky logo bar —— */
+  /* —— Sticky logo bar (fixed height so subnav offset stays correct) —— */
   #header {
     position: sticky;
     top: 0;
     z-index: 40;
-    background: #071a25;
-  }
-
-  #header .top {
-    background: #071a25;
-  }
-
-  #header .top-inner {
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
     height: var(--mobile-header-height);
-    min-height: var(--mobile-header-height);
-    padding: 8px 0;
+    overflow: hidden;
+    background: #071a25;
+  }
+
+  #header .top,
+  #header .top-inner {
+    height: 100%;
+    min-height: 0 !important;
     box-sizing: border-box;
   }
 
+  #header .top-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0 !important;
+  }
+
   #header .starenborg-logo {
-    width: auto;
-    height: 68px;
-    max-width: min(92vw, 360px);
-    object-fit: contain;
+    width: auto !important;
+    height: 68px !important;
+    max-width: min(92vw, 360px) !important;
+    object-fit: contain !important;
   }
 
-  #header .nav {
-    display: none !important;
-  }
-
+  #header .nav,
+  #header .quick-nav,
   .menu-btn {
     display: none !important;
   }
 
-  /* —— Department buttons: locked under the header —— */
+  /* —— Department buttons locked under the logo (desktop hero-nav look) —— */
   #content > .subnav-wrap {
     position: sticky;
     top: var(--mobile-subnav-offset);
     z-index: 35;
     background: rgba(7, 26, 37, 0.96);
     border-bottom: 1px solid rgba(174, 151, 115, 0.45);
-    padding: 10px 10px 12px;
+    padding: 10px 10px 12px !important;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
@@ -73,28 +74,26 @@
     margin: 0 !important;
   }
 
-  #content > .subnav-wrap .subnav-choice {
+  #content > .subnav-wrap .subnav-choice,
+  #content > .subnav-wrap .subnav .subnav-choice {
     min-width: 0 !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 52px;
-    padding: 8px 2px !important;
+    min-height: 44px !important;
+    padding: 8px 4px !important;
     border-radius: 8px !important;
     border: 0 !important;
     background: rgba(7, 26, 37, 0.55) !important;
     color: #f4dfbf !important;
     font: 700 12px Arial, sans-serif !important;
-    gap: 4px !important;
+    gap: 2px !important;
     box-shadow: none !important;
     transform: none !important;
+    white-space: normal !important;
   }
 
-  #content > .subnav-wrap .subnav-choice .subnav-symbol,
-  #content > .subnav-wrap .subnav-choice .subnav-symbol svg {
-    font-size: 18px !important;
-    width: 20px !important;
-    height: 20px !important;
-    color: inherit !important;
+  #content > .subnav-wrap .subnav-choice .subnav-symbol {
+    display: none !important; /* match desktop text buttons */
   }
 
   #content > .subnav-wrap .subnav-choice.is-current,
@@ -105,36 +104,34 @@
     transform: none !important;
   }
 
-  /* Match desktop: portal is a simple text-style control, not a big card */
   #content > .subnav-wrap .portal-wide.portal-sub {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin: 8px auto 0;
-    width: min(100%, 280px);
+    margin: 8px auto 0 !important;
+    width: min(100%, 240px) !important;
     min-height: 40px;
-    padding: 8px 14px;
-    border: 0;
-    border-radius: 8px;
-    background: #e6c49a;
+    padding: 8px 14px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: #e6c49a !important;
     color: #0b202b !important;
-    text-decoration: none;
-    font: 700 14px Arial, sans-serif;
+    text-decoration: none !important;
+    font: 700 14px Arial, sans-serif !important;
   }
 
   #content > .subnav-wrap .portal-wide.portal-sub small,
   #content > .subnav-wrap .portal-wide.portal-sub .portal-arrow {
-    display: none;
+    display: none !important;
   }
 
   #content > .subnav-wrap .portal-wide.portal-sub svg {
-    width: 16px;
-    height: 16px;
+    width: 16px !important;
+    height: 16px !important;
     flex: none;
   }
 
-  /* Desktop uses .hero-nav; keep it off on phones/tablets */
   .hero-nav {
     display: none !important;
   }
@@ -190,25 +187,18 @@
     display: none !important;
   }
 
-  #content .hero-title,
-  #content .hero-copy .lead,
-  #content .hero-copy p,
-  #content .section p,
-  #content .division-section p {
-    color: #e6c49a !important;
-  }
-
   #content .hero-title {
     font-size: clamp(1.55rem, 6.4vw, 2.6rem) !important;
     line-height: 1.2 !important;
     letter-spacing: -0.02em;
     margin: 8px 0 18px;
-    white-space: normal;
+    color: #e6c49a !important;
+    white-space: normal !important;
   }
 
   #content .hero-title span {
     display: block;
-    white-space: normal;
+    white-space: normal !important;
   }
 
   #content .section .lead {
@@ -216,7 +206,6 @@
     line-height: 1.6;
   }
 
-  /* Cream intro panels + cards — same as desktop */
   #content .pinstripe-panel.intro-box,
   #content .about-story > .shell.intro-box,
   #content .monthly-panel.intro-box,
@@ -239,8 +228,8 @@
   }
 
   #content .section .cards {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
     gap: 12px;
     background: rgba(7, 26, 37, 0.78) !important;
     border-radius: 16px;
@@ -266,7 +255,6 @@
     color: #0a1a22;
   }
 
-  /* —— Page titles —— */
   #content > .pagehead {
     position: static;
     padding: 18px 12px 6px !important;
@@ -294,98 +282,141 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
   }
 
-  /* —— Home division cards: readable, not tiny icon chips —— */
-  .division-section {
-    padding: 24px 0 36px !important;
+  /*
+   * Home division cards — beat base.css 5-column chip layout.
+   * Selectors must be at least as specific as:
+   *   .division-section .division-grid
+   *   .division-section .division-grid > .division-card
+   *   .division-section .division-grid > .division-card p
+   */
+  #content .division-section {
+    padding: 20px 12px 36px !important;
   }
 
-  .division-grid {
+  #content .division-section > .shell {
+    width: calc(100% - 24px) !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  #content .division-section .division-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
+    grid-auto-flow: row !important;
     gap: 12px !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    justify-content: stretch !important;
+    justify-items: stretch !important;
+    align-items: stretch !important;
   }
 
-  .division-section .shell {
-    width: calc(100% - 24px) !important;
-  }
-
-  .division-section .division-grid > .division-card,
-  .division-section .division-grid > .division-card:nth-child(4),
-  .division-section .division-grid > .division-card:nth-child(5) {
-    grid-column: auto !important;
+  #content .division-section .division-grid > .division-card,
+  #content .division-section .division-grid > .division-card:nth-child(4),
+  #content .division-section .division-grid > .division-card:nth-child(5) {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
     gap: 10px !important;
     width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
     min-height: 0 !important;
     height: auto !important;
     padding: 20px 18px !important;
+    margin: 0 !important;
     border: 0 !important;
     border-radius: 16px !important;
-    background: rgba(255, 248, 240, 0.9) !important;
+    background: rgba(255, 248, 240, 0.92) !important;
     color: #071a25 !important;
     text-align: left !important;
     overflow: visible !important;
+    box-sizing: border-box !important;
+    transform: none !important;
   }
 
-  .division-section .division-card .division-icon {
+  /* Beat base/desktop gold text on cream cards */
+  #content .division-section .division-grid > .division-card,
+  #content .division-section .division-grid > .division-card :is(h2, p, span, .division-link, .division-icon) {
+    color: #071a25 !important;
+    text-shadow: none !important;
+  }
+
+  #content .division-section .division-grid > .division-card .division-icon {
+    display: flex !important;
     height: auto !important;
     min-height: 0 !important;
-    flex: none !important;
+    flex: 0 0 auto !important;
     font-size: 28px !important;
     color: #8a7048 !important;
+    line-height: 1 !important;
   }
 
-  .division-section .division-card .division-icon svg {
+  #content .division-section .division-grid > .division-card .division-icon svg {
+    display: block !important;
     width: 28px !important;
     height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
     max-width: 28px !important;
     max-height: 28px !important;
     color: inherit !important;
   }
 
-  .division-section .division-card h2 {
+  #content .division-section .division-grid > .division-card h2 {
     display: block !important;
+    width: 100% !important;
     margin: 0 !important;
+    padding: 0 !important;
     font: 700 clamp(1.15rem, 4.5vw, 1.45rem) / 1.2 Georgia, serif !important;
     color: #071a25 !important;
+    text-shadow: none !important;
+    white-space: normal !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  #content .division-section .division-grid > .division-card p,
+  #content .division-section .division-grid > .division-card .division-link {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    color: #243540 !important;
+    text-shadow: none !important;
     white-space: normal !important;
     text-align: left !important;
   }
 
-  .division-section .division-card p {
-    display: block !important;
-    margin: 0 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    color: #243540 !important;
-    white-space: normal !important;
-  }
-
-  .division-section .division-card .division-link {
-    display: inline-block !important;
+  #content .division-section .division-grid > .division-card .division-link {
     margin-top: 4px !important;
-    font-size: 0.95rem !important;
-    font-weight: 700;
+    font-weight: 700 !important;
     color: #6d5634 !important;
   }
 
-  .portal-wide {
-    width: 100%;
-    margin-top: 14px;
+  #content .division-section .portal-wide {
+    display: flex !important;
+    width: 100% !important;
+    margin-top: 14px !important;
     font-size: 15px;
     gap: 10px;
   }
 
-  .portal-wide small {
+  #content .division-section .portal-wide small {
     font-size: 12px;
   }
 
   /* —— Heroes & layouts —— */
   #content > .hero-home {
-    height: clamp(220px, 52svh, 480px);
+    height: clamp(220px, 48svh, 420px);
   }
 
   #content > .hero img,
@@ -395,16 +426,13 @@
   }
 
   .two,
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
+  .cards,
   .inbox {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   #content .contact-layout > .shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 28px;
   }
 
@@ -416,20 +444,7 @@
   }
 
   #content:has(.department-scroll-copy) > .hero {
-    height: clamp(120px, 28svh, 220px);
-  }
-
-  .hero-backdrop {
-    /* Keep backdrop under sticky chrome */
-  }
-
-  .brand {
-    gap: 6px;
-  }
-
-  .starenborg-mark {
-    width: 40px;
-    height: 32px;
+    height: clamp(140px, 32svh, 240px);
   }
 }
 
@@ -439,7 +454,6 @@
   }
 }
 
-/* Slightly tighter sticky chrome on very small phones */
 @media (max-width: 390px) {
   :root {
     --mobile-header-height: 80px;
@@ -447,13 +461,13 @@
   }
 
   #header .starenborg-logo {
-    height: 60px;
+    height: 60px !important;
   }
 
   #content > .subnav-wrap .subnav-choice {
     font-size: 11px !important;
-    min-height: 48px;
-    padding: 6px 1px !important;
+    min-height: 40px !important;
+    padding: 6px 2px !important;
   }
 
   #content > .pagehead h1 {
