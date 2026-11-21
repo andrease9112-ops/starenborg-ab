@@ -167,9 +167,9 @@ function aboutStory(C){
 function renderPage(){
 const C=window.SITE;C.announcements=window.MALARDALA_PUBLIC_NEWS||[];const $=(s)=>document.querySelector(s);const page=({hem:"hem",tjanster:"tjanster",om:"om",priser:"priser",kontakt:"kontakt",kundportal:"portal",admin:"admin",hastar:"hastar",transport:"transport",bygg:"bygg"})[location.hash.slice(1)]||"hem";
 const links=[["hem","Hem","#hem"],["transport","Transport","#transport"],["hastar","Hästar","#hastar"],["bygg","Bygg","#bygg"],["tjanster","Tjänster","#tjanster"],["om","Om oss","#om"],["priser","Priser","#priser"],["kontakt","Kontakt","#kontakt"]];
-$("#header").innerHTML=`<div class="top"><div class="shell top-inner new-header"><a class="brand" href="#hem"><img class="starenborg-logo" alt="Starenborg Redovisning AB – Bokföring, Årsbokslut, Rådgivning" src="assets/logo.png"></a><nav class="nav quick-nav" aria-label="Sidnavigering"><a href="#hem">Hem</a><a href="#transport">Transport</a><a href="#hastar">Hästar</a><a href="#bygg">Bygg</a><a href="#om">Om oss</a><a href="#kontakt">Kontakt</a><a href="#admin">Inkorg</a></nav></div></div>`;
+$("#header").innerHTML=`<div class="top"><div class="shell top-inner new-header"><a class="brand" href="#hem"><img class="starenborg-logo" alt="Starenborg Redovisning AB – Bokföring, Årsbokslut, Rådgivning" src="assets/logo.png"></a><nav class="nav quick-nav" aria-label="Sidnavigering"><a href="#hem">Hem</a><a href="#transport">Transport</a><a href="#hastar">Hästar</a><a href="#bygg">Bygg</a><a href="#om">Om oss</a><a href="#kontakt">Kontakt</a><a href="#admin">Omnio inloggning</a></nav></div></div>`;
 $("#footer").innerHTML="";
-const headings={hem:"Ekonomi som förstår din bransch",tjanster:"Våra tjänster",hastar:"Häst & trav",transport:"Transport & åkeri",bygg:"Bygg & entreprenad",om:"Om oss",priser:"Priser & paket",kontakt:"Kontakta oss",portal:"Kundportal",admin:"Inkorg"};
+const headings={hem:"Ekonomi som förstår din bransch",tjanster:"Våra tjänster",hastar:"Häst & trav",transport:"Transport & åkeri",bygg:"Bygg & entreprenad",om:"Om oss",priser:"Priser & paket",kontakt:"Kontakta oss",portal:"Kundportal",admin:"Omnio inloggning"};
 $("#pagehead").innerHTML="";
 if(page!=="kontakt")$("#pagehead").innerHTML=`<div class="pagehead"><div class="shell"><h1${page==="om"?' data-edit-about-title':''}>${headings[page]}</h1></div></div>`;
 let html="";
@@ -186,7 +186,7 @@ if(page==="portal")html=`<section class="section"><div class="shell"><h2>Säker 
 if(page==="hem")html+=`<section class="monthly-news"><div class="shell"><div class="pinstripe-panel monthly-panel"><span class="eyebrow">Starenborg Ekonomi AB</span><h2>Månadens händelser</h2><p class="monthly-intro">Här delar vi nyheter och aktuella händelser från vår verksamhet.</p><div class="monthly-list">${C.announcements.length?C.announcements.map((a,i)=>`<article class="monthly-entry"><span class="eyebrow">${escapeHtml(a.category||"Nyhet")}</span><h3>${escapeHtml(a.title)}</h3><p>${escapeHtml(a.text)}</p></article>`).join(""):`<p class="monthly-empty">Inga nyheter publicerade ännu.</p>`}</div></div></div></section>`;
 if(page==="admin"){
  const a=window.MALARDALA_AUTH;
- html=`<section class="section"><div class="shell"><h2>Inkorg</h2><div id="portal-app"></div></div></section>`;
+ html=`<section class="section"><div class="shell"><h2>Omnio inloggning</h2><div id="portal-app"></div></div></section>`;
 }
 // Gemensamma avdelningsknappar på alla undersidor, med aktivt val.
 if(page!=="hem" && page!=="admin"){
@@ -199,7 +199,7 @@ if(["transport","bygg","hastar"].includes(page)){
 }
 const desktopLinks=[
  ["transport","Transport"],["bygg","Bygg"],["hastar","Hästar"],
- ["om","Om oss"],["kontakt","Kontakt"],["admin","Inkorg"]
+ ["om","Om oss"],["kontakt","Kontakt"],["admin","Omnio inloggning"]
 ];
 const desktopNav=`<nav class="hero-nav" aria-label="Avdelningar och kundportal">${desktopLinks.map(([id,label])=>`<a href="#${id}"${id==="admin"?' class="portal-link"':''}${id===page?' aria-current="page"':''}>${label}</a>`).join("")}</nav>`;
 $("#content").innerHTML=desktopNav+html;setTimeout(()=>{applyEditableContent();if(page==="admin")renderPortal();},0);
