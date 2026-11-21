@@ -15,8 +15,8 @@
  #content > .subnav-wrap{display:none}
  .hero-nav a.portal-link{background:#e6c49a;color:#0b202b}
  .hero-nav a:hover,.hero-nav a:focus-visible{outline:2px solid rgba(244,223,191,.55);outline-offset:2px}
- .hero-home + .division-section .division-grid,
- .hero-home + .division-section .portal-wide{display:none!important}
+ .hero-home + .division-section{display:none!important}
+ #content > .hero-home + .division-section + .monthly-news{padding-top:8px!important}
 }
 
 @media (min-width: 701px) {
