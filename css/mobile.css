@@ -301,25 +301,19 @@
     overflow: hidden !important;
     pointer-events: none !important;
     margin: 0 !important;
-    box-sizing: border-box !important;
-    /* Keep the photo below the buttons so nothing is hidden behind them. */
-    padding: var(--mobile-nav-height) 0 0 !important;
+    padding: 0 !important;
     background: #0b202b !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
   }
 
   #content > .hero-backdrop > img {
     display: block !important;
     width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
     object-position: center center !important;
     opacity: 1 !important;
-    flex: 0 1 auto !important;
   }
 
   #content .hero > img,
@@ -353,12 +347,6 @@
 
   #content > .hero-home > .pagehead h1 {
     font-size: clamp(1.55rem, 6.4vw, 2.3rem) !important;
-  }
-
-  /* Cards on these pages start below the full photo so they don't cover it. */
-  #content > .about-story,
-  #content > .section.contact-layout {
-    margin-top: calc((100dvh - var(--mobile-header-height) - var(--mobile-nav-height) - var(--mobile-safe-top)) / 2 + 25vw + 16px) !important;
   }
 
   /* Fade text out as it scrolls past the locked buttons */
