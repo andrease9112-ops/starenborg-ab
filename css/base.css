@@ -509,16 +509,24 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 #content .about-story > .shell{max-width:780px;text-align:center}
 #content .about-story p,#content .about-story h2{white-space:pre-line}
 
-/* Avdelningssidor: inga färgade rutor, inga gula/guldlinjer – bara text på bilden */
-#content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice),
+/* Avdelningssidor: navy halvtransparent, utan ytterlinjer */
 #content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice)::before,
 #content:has(.department-scroll-copy) :is(.hero-copy,.section,.pagehead,.shell,.pinstripe-panel,.card,.notice)::after{
- background:transparent!important;
+ background:none!important;
  background-image:none!important;
  border:0!important;
- border-color:transparent!important;
  box-shadow:none!important;
+ content:none!important;
+}
+#content:has(.department-scroll-copy) :is(.pagehead > .shell,.pinstripe-panel,.section > .shell,.card,.notice){
+ background:rgba(7,26,37,.5)!important;
+ background-image:none!important;
+ border:0!important;
  outline:0!important;
+ box-shadow:none!important;
+ border-radius:14px;
+ backdrop-filter:none!important;
+ -webkit-backdrop-filter:none!important;
 }
 #content:has(.department-scroll-copy) :is(.pinstripe-panel,.pagehead .shell,.shell)::before,
 #content:has(.department-scroll-copy) :is(.pinstripe-panel,.pagehead .shell,.shell)::after,
