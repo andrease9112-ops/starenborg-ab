@@ -167,9 +167,9 @@ function aboutStory(C){
 function renderPage(){
 const C=window.SITE;C.announcements=window.MALARDALA_PUBLIC_NEWS||[];const $=(s)=>document.querySelector(s);const page=({hem:"hem",tjanster:"tjanster",om:"om",priser:"priser",kontakt:"kontakt",kundportal:"portal",admin:"admin",hastar:"hastar",transport:"transport",bygg:"bygg"})[location.hash.slice(1)]||"hem";
 const links=[["hem","Hem","#hem"],["transport","Transport","#transport"],["hastar","Hästar","#hastar"],["bygg","Bygg","#bygg"],["tjanster","Tjänster","#tjanster"],["om","Om oss","#om"],["priser","Priser","#priser"],["kontakt","Kontakt","#kontakt"]];
-$("#header").innerHTML=`<div class="top"><div class="shell top-inner new-header"><a class="brand" href="#hem"><img class="starenborg-logo" alt="Starenborg Redovisning AB – Bokföring, Årsbokslut, Rådgivning" src="assets/logo.png"></a><nav class="nav quick-nav" aria-label="Sidnavigering"><a href="#hem">Hem</a><a href="#transport">Transport</a><a href="#hastar">Hästar</a><a href="#bygg">Bygg</a><a href="#om">Om oss</a><a href="#kontakt">Kontakt</a></nav></div></div>`;
+$("#header").innerHTML=`<div class="top"><div class="shell top-inner new-header"><a class="brand" href="#hem"><img class="starenborg-logo" alt="Starenborg Redovisning AB – Bokföring, Årsbokslut, Rådgivning" src="assets/logo.png"></a><nav class="nav quick-nav" aria-label="Sidnavigering"><a href="#hem">Hem</a><a href="#transport">Transport</a><a href="#hastar">Hästar</a><a href="#bygg">Bygg</a><a href="#om">Om oss</a><a href="#kontakt">Kontakt</a><a href="#admin">Inkorg</a></nav></div></div>`;
 $("#footer").innerHTML="";
-const headings={hem:"Ekonomi som förstår din bransch",tjanster:"Våra tjänster",hastar:"Häst & trav",transport:"Transport & åkeri",bygg:"Bygg & entreprenad",om:"Om oss",priser:"Priser & paket",kontakt:"Kontakta oss",portal:"Kundportal",admin:"Administration"};
+const headings={hem:"Ekonomi som förstår din bransch",tjanster:"Våra tjänster",hastar:"Häst & trav",transport:"Transport & åkeri",bygg:"Bygg & entreprenad",om:"Om oss",priser:"Priser & paket",kontakt:"Kontakta oss",portal:"Kundportal",admin:"Inkorg"};
 $("#pagehead").innerHTML="";
 if(page!=="kontakt")$("#pagehead").innerHTML=`<div class="pagehead"><div class="shell"><h1${page==="om"?' data-edit-about-title':''}>${headings[page]}</h1></div></div>`;
 let html="";
@@ -186,7 +186,7 @@ if(page==="portal")html=`<section class="section"><div class="shell"><h2>Säker 
 if(page==="hem")html+=`<section class="monthly-news"><div class="shell"><div class="pinstripe-panel monthly-panel"><span class="eyebrow">Starenborg Ekonomi AB</span><h2>Månadens händelser</h2><p class="monthly-intro">Här delar vi nyheter och aktuella händelser från vår verksamhet.</p><div class="monthly-list">${C.announcements.length?C.announcements.map((a,i)=>`<article class="monthly-entry"><span class="eyebrow">${escapeHtml(a.category||"Nyhet")}</span><h3>${escapeHtml(a.title)}</h3><p>${escapeHtml(a.text)}</p></article>`).join(""):`<p class="monthly-empty">Inga nyheter publicerade ännu.</p>`}</div></div></div></section>`;
 if(page==="admin"){
  const a=window.MALARDALA_AUTH;
- html=`<section class="section"><div class="shell"><h2>${a.user?(a.isAdmin?"Administration":"Min kundportal"):"Kundportal – logga in"}</h2><div id="portal-app"></div></div></section>`;
+ html=`<section class="section"><div class="shell"><h2>Inkorg</h2><div id="portal-app"></div></div></section>`;
 }
 // Gemensamma avdelningsknappar på alla undersidor, med aktivt val.
 if(page!=="hem" && page!=="admin"){
@@ -199,7 +199,7 @@ if(["transport","bygg","hastar"].includes(page)){
 }
 const desktopLinks=[
  ["transport","Transport"],["bygg","Bygg"],["hastar","Hästar"],
- ["om","Om oss"],["kontakt","Kontakt"],["admin","Kundportal"]
+ ["om","Om oss"],["kontakt","Kontakt"],["admin","Inkorg"]
 ];
 const desktopNav=`<nav class="hero-nav" aria-label="Avdelningar och kundportal">${desktopLinks.map(([id,label])=>`<a href="#${id}"${id==="admin"?' class="portal-link"':''}${id===page?' aria-current="page"':''}>${label}</a>`).join("")}</nav>`;
 $("#content").innerHTML=desktopNav+html;setTimeout(()=>{applyEditableContent();if(page==="admin")renderPortal();},0);
@@ -385,7 +385,7 @@ window.addEventListener('hashchange',()=>setTimeout(renderAdminNewsList,0));
 <script>
 const CONTENT_PAGES=['hem','transport','hastar','bygg','om','kontakt','priser','tjanster'];
 const editableContent={};
-let portalTab='inkorg',portalClientId=null,portalCustomerId=null,portalDocs=[],portalCustomers=[],mailboxes=[],activeMailboxId=null,openMessageId=null;
+let portalTab='inkorg',portalClientId=null,portalCustomerId=null,portalDocs=[],portalCustomers=[],mailboxes=[],activeMailboxId=null,openMessageId=null,mailView='in';
 const db=()=>window.MALARDALA_AUTH?.client;
 const safe=t=>escapeHtml(String(t??''));
 const statusMessage=(t)=>{const el=document.getElementById('portal-message');if(el)el.textContent=t;};
@@ -489,7 +489,7 @@ function switchDemoAccount(){
  const current=demoSession();
  const next=DEMO_ACCOUNTS.find(account=>account.id!==current?.id)||DEMO_ACCOUNTS[0];
  sessionStorage.setItem('starenborg-demo-user',JSON.stringify({id:next.id,email:next.email,name:next.name,demo:true}));
- activeMailboxId=null;openMessageId=null;renderPortal();
+ activeMailboxId=null;openMessageId=null;mailView='in';renderPortal();
 }
 function workLocalPart(user){
  const meta=user?.user_metadata||{};
@@ -517,6 +517,18 @@ async function ensureWorkMailboxes(user){
  }
  return null;
 }
+function paintInbox(pane,current,messages,onOpen){
+ const folder=mailView==='out'?'out':'in';
+ const visible=mailView==='write'?[]:messages.filter(m=>m.direction===folder);
+ const open=visible.find(m=>m.id===openMessageId)||null;
+ const unread=messages.filter(m=>m.direction==='in'&&!m.is_read).length;
+ pane.innerHTML=`<div class="inbox"><aside class="inbox-side"><h3>Inkorg</h3><ul class="mailbox-list">${mailboxes.map(box=>`<li><button type="button" data-mailbox="${safe(box.id)}" aria-pressed="${box.id===activeMailboxId}"><strong>${safe(box.display_name)}</strong><br>${safe(box.address)}${box.kind==='shared'?'<br><small>Syns för alla</small>':''}</button></li>`).join('')}</ul><div class="inbox-toolbar"><button type="button" data-view="in" aria-pressed="${mailView==='in'}">Inkorg${unread?' ('+unread+')':''}</button><button type="button" data-view="out" aria-pressed="${mailView==='out'}">Skickat</button><button type="button" data-view="write" aria-pressed="${mailView==='write'}">Nytt mejl</button></div></aside><section class="inbox-main">${mailView==='write'?`<h3>Nytt mejl</h3><form id="work-mail-form"><label>Till<input name="to" type="email" required maxlength="254" value="${safe(current&&current.kind==='personal'?'info@starenborg.se':'jessica@starenborg.se')}"></label><label>Ämne<input name="subject" required maxlength="200"></label><label>Meddelande<textarea name="body" required maxlength="8000" rows="8"></textarea></label><button class="btn" type="submit">Skicka</button></form>`:`<h3>${folder==='out'?'Skickat':'Inkorg'}${current?' · '+safe(current.address):''}</h3><ul class="mail-list">${visible.map(m=>`<li><button type="button" data-message="${safe(m.id)}" class="${m.is_read?'':'is-unread'}"><span class="mail-from">${safe(m.direction==='out'?m.to_address:m.from_address)}</span><span class="mail-date">${safe(new Date(m.created_at).toLocaleString('sv-SE',{dateStyle:'medium',timeStyle:'short'}))}</span><strong>${safe(m.subject||'(utan ämne)')}</strong></button></li>`).join('')||'<li class="mail-empty">Inkorgen är tom.</li>'}</ul>${open?`<article class="mail-read"><h4>${safe(open.subject)}</h4><p><strong>${safe(open.direction==='out'?'Till':'Från')}:</strong> ${safe(open.direction==='out'?open.to_address:open.from_address)}</p><p>${safe(open.body)}</p></article>`:''}`}</section></div>`;
+ pane.querySelectorAll('[data-mailbox]').forEach(btn=>btn.addEventListener('click',()=>{activeMailboxId=btn.getAttribute('data-mailbox');openMessageId=null;mailView='in';renderPortal();}));
+ pane.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>{mailView=btn.getAttribute('data-view');openMessageId=null;renderPortal();}));
+ pane.querySelectorAll('[data-message]').forEach(btn=>btn.addEventListener('click',()=>onOpen(btn.getAttribute('data-message'))));
+ const form=document.getElementById('work-mail-form');
+ if(form)form.addEventListener('submit',sendWorkMail);
+}
 function renderDemoInbox(pane,demo){
  const store=readDemoMail();
  mailboxes=store.mailboxes.filter(box=>box.address===INFO_ADDRESS||box.owner_id===demo.id);
@@ -524,19 +536,14 @@ function renderDemoInbox(pane,demo){
  if(!mailboxes.some(box=>box.id===activeMailboxId))activeMailboxId=mailboxes[0]?.id||null;
  const current=mailboxes.find(box=>box.id===activeMailboxId);
  const messages=current?store.messages.filter(m=>m.mailbox_id===current.id).sort((a,b)=>b.created_at.localeCompare(a.created_at)):[];
- const open=messages.find(m=>m.id===openMessageId)||null;
- pane.innerHTML=`<div class="inbox"><aside class="inbox-side"><h3>Jobbmejl</h3><p class="portal-note">Din adress och infomejlen som alla övningskonton ser.</p><ul class="mailbox-list">${mailboxes.map(box=>`<li><button type="button" data-mailbox="${safe(box.id)}" aria-pressed="${box.id===activeMailboxId}"><strong>${safe(box.display_name)}</strong><br>${safe(box.address)}${box.kind==='shared'?'<br><small>Syns för alla</small>':''}</button></li>`).join('')}</ul></aside><section class="inbox-main"><h3>${current?safe(current.address):'Inkorg'}</h3><form id="work-mail-form"><label>Till<input name="to" type="email" required maxlength="254" value="${safe(current&&current.kind==='personal'?'info@starenborg.se':'jessica@starenborg.se')}"></label><label>Ämne<input name="subject" required maxlength="200"></label><label>Meddelande<textarea name="body" required maxlength="8000" rows="5"></textarea></label><button class="btn" type="submit">Skicka</button></form><ul class="mail-list">${messages.map(m=>`<li><button type="button" data-message="${safe(m.id)}"><strong>${m.is_read?'':'● '}${safe(m.subject||'(utan ämne)')}</strong>${safe(m.direction==='out'?'Till '+m.to_address:'Från '+m.from_address)} · ${safe(new Date(m.created_at).toLocaleString('sv-SE',{dateStyle:'medium',timeStyle:'short'}))}</button></li>`).join('')||'<li>Inkorgen är tom.</li>'}</ul>${open?`<article class="mail-read"><h4>${safe(open.subject)}</h4><p><strong>${safe(open.direction==='out'?'Till':'Från')}:</strong> ${safe(open.direction==='out'?open.to_address:open.from_address)}</p><p>${safe(open.body)}</p></article>`:''}</section></div>`;
- pane.querySelectorAll('[data-mailbox]').forEach(btn=>btn.addEventListener('click',()=>{activeMailboxId=btn.getAttribute('data-mailbox');openMessageId=null;renderPortal();}));
- pane.querySelectorAll('[data-message]').forEach(btn=>btn.addEventListener('click',()=>{
-  openMessageId=btn.getAttribute('data-message');
+ paintInbox(pane,current,messages,id=>{
+  openMessageId=id;
   const saved=readDemoMail();
-  const message=saved.messages.find(item=>item.id===openMessageId);
+  const message=saved.messages.find(item=>item.id===id);
   if(message)message.is_read=true;
   writeDemoMail(saved);
   renderPortal();
- }));
- const form=document.getElementById('work-mail-form');
- if(form)form.addEventListener('submit',sendWorkMail);
+ });
 }
 async function renderInbox(pane){
  const demo=demoSession();
@@ -559,16 +566,11 @@ async function renderInbox(pane){
   if(msgErr){pane.innerHTML=`<h3>Inkorg</h3><p>${safe(msgErr.message)}</p>`;return;}
   messages=rows||[];
  }
- const open=messages.find(m=>m.id===openMessageId)||null;
- pane.innerHTML=`<div class="inbox"><aside class="inbox-side"><h3>Jobbmejl</h3><p class="portal-note">Din adress och infomejlen som alla administratörer ser.</p><ul class="mailbox-list">${mailboxes.map(box=>`<li><button type="button" data-mailbox="${safe(box.id)}" aria-pressed="${box.id===activeMailboxId}"><strong>${safe(box.display_name)}</strong><br>${safe(box.address)}${box.kind==='shared'?'<br><small>Syns för alla</small>':''}</button></li>`).join('')}</ul></aside><section class="inbox-main"><h3>${current?safe(current.address):'Inkorg'}</h3><form id="work-mail-form"><label>Till<input name="to" type="email" required maxlength="254" placeholder="namn@starenborg.se"></label><label>Ämne<input name="subject" required maxlength="200"></label><label>Meddelande<textarea name="body" required maxlength="8000" rows="5"></textarea></label><button class="btn" type="submit">Skicka</button></form><ul class="mail-list">${messages.map(m=>`<li><button type="button" data-message="${safe(m.id)}"><strong>${safe(m.subject||'(utan ämne)')}</strong>${safe(m.direction==='out'?'Till '+m.to_address:'Från '+m.from_address)} · ${safe(new Date(m.created_at).toLocaleString('sv-SE',{dateStyle:'medium',timeStyle:'short'}))}</button></li>`).join('')||'<li>Inkorgen är tom.</li>'}</ul>${open?`<article class="mail-read"><h4>${safe(open.subject)}</h4><p><strong>${safe(open.direction==='out'?'Till':'Från')}:</strong> ${safe(open.direction==='out'?open.to_address:open.from_address)}</p><p>${safe(open.body)}</p></article>`:''}</section></div>`;
- pane.querySelectorAll('[data-mailbox]').forEach(btn=>btn.addEventListener('click',()=>{activeMailboxId=btn.getAttribute('data-mailbox');openMessageId=null;renderPortal();}));
- pane.querySelectorAll('[data-message]').forEach(btn=>btn.addEventListener('click',async()=>{
-  openMessageId=btn.getAttribute('data-message');
-  await db().from('work_messages').update({is_read:true}).eq('id',openMessageId);
+ paintInbox(pane,current,messages,async id=>{
+  openMessageId=id;
+  await db().from('work_messages').update({is_read:true}).eq('id',id);
   renderPortal();
- }));
- const form=document.getElementById('work-mail-form');
- if(form)form.addEventListener('submit',sendWorkMail);
+ });
 }
 async function sendWorkMail(e){
  e.preventDefault();
@@ -585,8 +587,9 @@ async function sendWorkMail(e){
   const dest=store.mailboxes.find(item=>item.address===to);
   if(dest&&dest.id!==box.id)store.messages.push({id:'m-'+(Date.now()+1),mailbox_id:dest.id,direction:'in',from_address:box.address,to_address:to,subject,body,is_read:false,created_at:stamp});
   writeDemoMail(store);
+  mailView='out';openMessageId=null;
   renderPortal();
-  statusMessage(dest?'Mejlet ligger i övningsinkorgen. Byt konto för att läsa det hos mottagaren.':'Mejlet är sparat i Skickat. Adressen finns inte bland övningsadresserna.');
+  statusMessage(dest?'Mejlet ligger i mottagarens inkorg. Byt konto för att läsa det.':'Mejlet är sparat i Skickat. Adressen finns inte bland övningsadresserna.');
   return;
  }
  const to=String(f.get('to')||'').trim().toLowerCase();
