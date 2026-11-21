@@ -1,8 +1,9 @@
 /* Mobile + tablet only. Desktop styles live in desktop.css — do not change that file. */
 @media (max-width: 800px) {
   :root {
-    --mobile-header-height: 64px;
-    --mobile-nav-height: 40px;
+    --mobile-header-height: 58px;
+    --mobile-nav-height: 78px;
+    --mobile-safe-top: env(safe-area-inset-top, 0px);
   }
 
   html {
@@ -24,7 +25,8 @@
     left: 0;
     right: 0;
     z-index: 40;
-    height: var(--mobile-header-height);
+    height: calc(var(--mobile-header-height) + var(--mobile-safe-top));
+    padding-top: var(--mobile-safe-top);
     overflow: hidden;
     background: #071a25;
   }
@@ -46,8 +48,8 @@
 
   #header .starenborg-logo {
     width: auto !important;
-    height: 48px !important;
-    max-width: min(70vw, 260px) !important;
+    height: 44px !important;
+    max-width: min(78vw, 280px) !important;
     object-fit: contain !important;
   }
 
@@ -65,26 +67,26 @@
     display: none !important;
   }
 
-  /* Locked under logo — solid strip so photos start cleanly below */
+  /* Two rows that always fit a real phone — nothing slides off the edge */
   #content > .hero-nav,
   .hero-nav {
     position: fixed !important;
-    top: var(--mobile-header-height) !important;
+    top: calc(var(--mobile-header-height) + var(--mobile-safe-top)) !important;
     left: 0 !important;
     right: 0 !important;
     bottom: auto !important;
     z-index: 35 !important;
     display: flex !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
-    padding: 6px 8px !important;
+    gap: 6px !important;
+    padding: 6px 8px 8px !important;
     margin: 0 !important;
     min-height: var(--mobile-nav-height);
     box-sizing: border-box;
     pointer-events: none !important;
-    background: rgba(7, 26, 37, 0.94) !important;
+    background: #071a25 !important;
     border: 0 !important;
     border-bottom: 1px solid rgba(174, 151, 115, 0.35) !important;
   }
@@ -94,33 +96,34 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 0 1 auto !important;
+    flex: 1 1 calc(33.33% - 6px) !important;
     min-width: 0 !important;
-    max-width: none !important;
-    min-height: 28px !important;
-    height: 28px !important;
-    padding: 0 7px !important;
+    max-width: calc(33.33% - 4px) !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 4px !important;
     border: 0 !important;
-    border-radius: 6px !important;
-    background: rgba(7, 26, 37, 0.55) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 248, 240, 0.08) !important;
     color: #f4dfbf !important;
     text-decoration: none !important;
-    font: 700 10px Arial, sans-serif !important;
+    font: 700 12px/1 Arial, sans-serif !important;
     box-shadow: none !important;
     white-space: nowrap !important;
   }
 
   .hero-nav a[aria-current="page"] {
     background: rgba(7, 26, 37, 0.8) !important;
-    box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.35) !important;
+    box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.45) !important;
   }
 
   .hero-nav a.portal-link {
     background: #e6c49a !important;
     color: #0b202b !important;
-    flex: 0 0 auto !important;
-    padding: 0 9px !important;
-    font-size: 10px !important;
+    flex: 1 1 100% !important;
+    max-width: min(240px, 92%) !important;
+    height: 36px !important;
+    font-size: 13px !important;
   }
 
   /* Match desktop home: hide the big division card grid */
@@ -136,7 +139,7 @@
   #content {
     position: relative;
     background: transparent !important;
-    padding-top: calc(var(--mobile-header-height) + var(--mobile-nav-height)) !important;
+    padding-top: calc(var(--mobile-header-height) + var(--mobile-nav-height) + var(--mobile-safe-top)) !important;
   }
 
   #content .hero-copy,
@@ -282,93 +285,46 @@
   }
 
   /*
-   * Dynamic image framing for every phone/tablet ≤800px.
-   * Photos always start BELOW the fixed logo+nav so faces/subjects
-   * are never covered — same behavior on all device widths.
+   * Real phone layout: every hero is a full-width banner.
+   * height:auto keeps the whole photo (horse, truck, excavator) — no crop, no letterbox.
    */
-  :root {
-    --mobile-chrome: calc(var(--mobile-header-height) + var(--mobile-nav-height));
+  #content > .hero-backdrop {
+    display: none !important;
   }
 
   #content > .hero,
-  #content > .hero-home {
+  #content > .hero-home,
+  #content:has(.department-scroll-copy) > .hero {
     position: relative !important;
     width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     overflow: hidden !important;
     background: #071a25 !important;
   }
 
-  /* Home hero fills remaining viewport under chrome */
-  #content > .hero-home {
-    height: calc(100svh - var(--mobile-chrome)) !important;
-    min-height: 480px !important;
-    max-height: none !important;
-  }
-
-  #content > .hero:not(.hero-home) {
-    height: clamp(170px, 38svh, 300px) !important;
-  }
-
-  #content:has(.department-scroll-copy) > .hero {
-    height: clamp(160px, 36svh, 280px) !important;
-  }
-
-  /*
-   * contain = whole photo visible (horse + truck + excavator, etc.)
-   * Same on every phone/tablet — no subject cropped away.
-   */
   #content > .hero > img,
-  #content > .hero-home > img {
+  #content > .hero-home > img,
+  #content > .hero:not(.hero-home) > img {
     display: block !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     max-height: none !important;
     margin: 0 !important;
     object-fit: contain !important;
     object-position: center center !important;
-    background: #071a25 !important;
-  }
-
-  #content > .hero:not(.hero-home) > img {
-    opacity: 0 !important;
-  }
-
-  #content > .hero-home > img {
     opacity: 1 !important;
-  }
-
-  /* Backdrop: full motif visible under chrome on all public pages */
-  #content > .hero-backdrop {
-    position: fixed !important;
-    top: var(--mobile-chrome) !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    z-index: -1 !important;
-    overflow: hidden !important;
     background: #071a25 !important;
-  }
-
-  #content > .hero-backdrop > img {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    object-position: center center !important;
   }
 
   #content > .hero-home > .pagehead {
-    position: absolute !important;
-    left: 0 !important;
-    right: 0 !important;
-    top: auto !important;
-    bottom: clamp(88px, 16svh, 150px) !important;
-    padding: 0 16px !important;
-    z-index: 2 !important;
+    position: static !important;
+    padding: 18px 16px 4px !important;
   }
 
   #content > .hero-home > .pagehead h1 {
-    font-size: clamp(1.55rem, 6.2vw, 2.35rem) !important;
+    font-size: clamp(1.45rem, 6.4vw, 2.15rem) !important;
   }
 
   #content img:not(.starenborg-logo) {
@@ -414,28 +370,12 @@
   }
 }
 
-@media (max-width: 390px) {
-  :root {
-    --mobile-header-height: 56px;
-    --mobile-nav-height: 64px;
-  }
-
-  #header .starenborg-logo {
-    height: 42px !important;
-  }
-
+@media (max-width: 360px) {
   .hero-nav a {
-    font-size: 9px !important;
-    height: 26px !important;
-    min-height: 26px !important;
-    padding: 0 5px !important;
-  }
-
-  .hero-nav a.portal-link {
-    padding: 0 7px !important;
+    font-size: 11px !important;
   }
 
   #content > .pagehead h1 {
-    font-size: clamp(1.45rem, 7.2vw, 2.1rem) !important;
+    font-size: clamp(1.35rem, 7vw, 1.9rem) !important;
   }
 }
