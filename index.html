@@ -24,10 +24,12 @@ function contactPage(){
  <p id="calendarStatus"></p>
  <div id="bookingDetails" hidden>
  <p id="availablePerson"></p>
+ <div class="booking-book">
  <label>Namn<input name="name" required maxlength="120" autocomplete="name"></label>
  <label>E-post<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
- <label>Meddelande (valfritt)<textarea name="message" maxlength="3000" rows="2"></textarea></label>
- <button class="btn">Boka möte</button><p role="status"></p>
+ <button class="btn" type="submit">Boka</button>
+ </div>
+ <p role="status"></p>
  </div></form></section>
  </div></section>`;
 }
@@ -48,18 +50,18 @@ function initContactPage(){
  const booking=document.getElementById("bookingForm"), status=document.getElementById("calendarStatus");
  const details=document.getElementById("bookingDetails"), personLine=document.getElementById("availablePerson");
  const [year,monthNumber]=stockholmToday().split("-").map(Number);
- let month=new Date(year,monthNumber-1,1), selected="", request=0;
+ let month=new Date(year,monthNumber-1,1), selected="", selectedPerson="", request=0;
  function openDay(date,person,button){
   calendar.querySelector('[aria-pressed="true"]')?.setAttribute("aria-pressed","false");
   button.setAttribute("aria-pressed","true");
-  selected=date;
+  selected=date;selectedPerson=person;
   details.hidden=false;
   personLine.textContent=person+" är tillgänglig "+swedishDate.format(new Date(date+"T12:00:00Z"))+".";
   booking.elements.name.focus();
  }
  async function showMonth(){
   const id=++request;
-  details.hidden=true;selected="";personLine.textContent="";
+  details.hidden=true;selected="";selectedPerson="";personLine.textContent="";
   const start=localDate(month);
   document.getElementById("bookingMonth").textContent=month.toLocaleDateString("sv-SE",{year:"numeric",month:"long"});
   calendar.innerHTML="Mån Tis Ons Tor Fre Lör Sön".split(" ").map(d=>`<span>${d}</span>`).join("");
@@ -101,13 +103,18 @@ function initContactPage(){
    const fields=new FormData(form), output=form.querySelector("[role=status]");
    const submit=form.querySelector("button.btn");
    const data=Object.fromEntries(fields);data.topics=fields.getAll("topic");data.date=selected;
-   if(form===booking && !selected){output.textContent="Välj ett datum med ledig tid.";return}
-   if(form===booking && !data.topics.length){output.textContent="Välj minst ett alternativ.";return}
-   submit.disabled=true;output.textContent="Skickar…";
+   if(form===booking){
+    if(!selected){output.textContent="Välj ett datum med ledig tid.";return}
+    if(!data.topics.length){output.textContent="Välj minst ett alternativ.";return}
+    data.advisor=selectedPerson;
+    data.teams=true;
+    data.attendees=[data.email,selectedPerson];
+   }
+   submit.disabled=true;output.textContent=form===booking?"Skickar Teams-inbjudan…":"Skickar…";
    try{
     const result=await contactRequest(form===booking?"book":"contact",data);form.reset();
-    if(form===booking){await showMonth();status.textContent=result.message}else output.textContent=result.message;
-   }catch(error){output.textContent=error.message}
+    if(form===booking){await showMonth();status.textContent=result.message||"Mötet är bokat och Teams-inbjudan är skickad."}else output.textContent=result.message;
+   }catch(error){output.textContent=form===booking && /nås|ansluten/i.test(error.message)?"Teams-inbjudan kunde inte skickas. Bokningen är inte kopplad till Microsoft 365 än.":error.message}
    finally{submit.disabled=false}
   };
  }

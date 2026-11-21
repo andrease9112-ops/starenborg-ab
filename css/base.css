@@ -344,16 +344,17 @@ html,body{max-width:100%!important;overflow-x:hidden!important}
 .booking-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0}
 .booking-toolbar button,.booking-day{border:1px solid #c9aa80;border-radius:5px;background:#071a25;color:#fff8ec;padding:7px;min-height:0;font:inherit}
 .booking-toolbar button,.booking-day:not(:disabled){cursor:pointer}
-.booking-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto repeat(6,minmax(28px,1fr));gap:4px;text-align:center;flex:1;min-height:250px}
+.booking-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto repeat(6,minmax(28px,1fr));gap:4px;text-align:center;flex:1;min-height:0}
 .booking-day{position:relative;display:flex;align-items:center;justify-content:center;height:100%;padding:2px 2px 8px}
 .booking-day .day-open{position:absolute;left:7px;right:7px;bottom:4px;height:4px;border-radius:99px;background:#3dce7a;pointer-events:none}
 .booking-day.available{background:#16382a;border-color:#7cc79d}
 .booking-day[aria-pressed=true]{outline:2px solid #071a25;outline-offset:1px}
 .booking-day:disabled{opacity:.45}
-#availablePerson{margin:0;font-weight:700;color:#071a25}
-#bookingDetails{display:grid;gap:6px}
-#bookingDetails textarea{height:52px;resize:none}
+#availablePerson{margin:8px 0 0;font-weight:700;color:#071a25}
+#bookingDetails{display:grid;gap:8px;margin-top:4px}
 #bookingDetails[hidden]{display:none}
+.booking-book{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.booking-book .btn{min-height:42px;padding-inline:22px}
 .contact-trap{position:absolute;left:-100vw}
 
 
