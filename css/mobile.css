@@ -77,4 +77,5 @@
 @media(max-width:800px){
  #content > .hero-home{height:clamp(260px,62svh,600px)}
  #header .starenborg-logo{width:min(96vw,560px)}
+ .inbox{grid-template-columns:1fr}
 }

@@ -384,7 +384,7 @@ window.addEventListener('hashchange',()=>setTimeout(renderAdminNewsList,0));
 <script>
 const CONTENT_PAGES=['hem','transport','hastar','bygg','om','kontakt','priser','tjanster'];
 const editableContent={};
-let portalTab='innehall',portalClientId=null,portalCustomerId=null,portalDocs=[],portalCustomers=[];
+let portalTab='inkorg',portalClientId=null,portalCustomerId=null,portalDocs=[],portalCustomers=[],mailboxes=[],activeMailboxId=null,openMessageId=null;
 const db=()=>window.MALARDALA_AUTH?.client;
 const safe=t=>escapeHtml(String(t??''));
 const statusMessage=(t)=>{const el=document.getElementById('portal-message');if(el)el.textContent=t;};
@@ -439,16 +439,93 @@ async function renderPortal(){
   el.innerHTML=`<div class="portal-box"><form onsubmit="portalLogin(event)"><label>E-post<input type="email" name="email" autocomplete="username" required></label><label>Lösenord<input type="password" name="password" autocomplete="current-password" required></label><button class="btn" type="submit">Logga in</button></form><p class="portal-note">Kundkonton skapas av administratören. Dela inte känsliga dokument förrän åtkomstreglerna har aktiverats och testats.</p><p id="portal-message" role="status"></p></div>`;return;
  }
  const admin=a.isAdmin;
- const tabs=admin?[['innehall','Redigera hemsidan'],['kontakt','Kontakt och möten'],['bilder','Bilder'],['kunder','Kunder'],['dokument','Underlag'],['nyheter','Nyheter']]:[['dokument','Mina underlag']];
- if(!tabs.some(t=>t[0]===portalTab))portalTab=admin?'innehall':'dokument';
+ const tabs=admin?[['inkorg','Inkorg'],['innehall','Redigera hemsidan'],['kontakt','Kontakt och möten'],['bilder','Bilder'],['kunder','Kunder'],['dokument','Underlag'],['nyheter','Nyheter']]:[['dokument','Mina underlag']];
+ if(!tabs.some(t=>t[0]===portalTab))portalTab=admin?'inkorg':'dokument';
  el.innerHTML=`<div class="portal-box"><p>Inloggad som <strong>${safe(a.user.email)}</strong> (${admin?'Administratör':'Kund'})</p><button onclick="adminLogout()">Logga ut</button><p id="portal-message" role="status"></p></div><nav class="portal-tabs">${tabs.map(([id,label])=>`<button aria-pressed="${portalTab===id}" onclick="portalTab='${id}';renderPortal()">${label}</button>`).join('')}</nav><div id="portal-pane" class="portal-box">Laddar…</div>`;
  const pane=document.getElementById('portal-pane');
+ if(portalTab==='inkorg')await renderInbox(pane);
  if(portalTab==='innehall')renderContentEditor(pane);
  if(portalTab==='kontakt')await renderContactSettings(pane);
  if(portalTab==='bilder')renderImageEditor(pane);
  if(portalTab==='kunder')await renderCustomers(pane);
  if(portalTab==='dokument')await renderDocuments(pane);
  if(portalTab==='nyheter')renderNewsEditor(pane);
+}
+const WORK_DOMAIN='starenborg.se';
+const INFO_ADDRESS='info@'+WORK_DOMAIN;
+function workLocalPart(user){
+ const meta=user?.user_metadata||{};
+ const named=String(meta.full_name||meta.name||meta.display_name||'').trim();
+ const source=named?named.split(/\s+/)[0]:String(user?.email||'').split('@')[0];
+ const local=source.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9._-]/g,'');
+ return local||'post';
+}
+function personalMailbox(user){
+ const local=workLocalPart(user);
+ return {address:local+'@'+WORK_DOMAIN,display_name:local.charAt(0).toUpperCase()+local.slice(1),kind:'personal',owner_id:user.id};
+}
+async function ensureWorkMailboxes(user){
+ const wanted=[personalMailbox(user),{address:INFO_ADDRESS,display_name:'Info',kind:'shared',owner_id:null}];
+ for(const row of wanted){
+  const {data:existing,error:readErr}=await db().from('work_mailboxes').select('id,owner_id,kind').eq('address',row.address).maybeSingle();
+  if(readErr)return readErr;
+  if(!existing){
+   const {error}=await db().from('work_mailboxes').insert(row);
+   if(error)return error;
+  }else if(row.kind==='personal'&&!existing.owner_id){
+   const {error}=await db().from('work_mailboxes').update({owner_id:user.id,display_name:row.display_name,kind:'personal'}).eq('id',existing.id);
+   if(error)return error;
+  }
+ }
+ return null;
+}
+async function renderInbox(pane){
+ const user=window.MALARDALA_AUTH.user;
+ const setupErr=await ensureWorkMailboxes(user);
+ if(setupErr){
+  pane.innerHTML=`<h3>Inkorg</h3><p>Inkorgen kan inte öppnas ännu: ${safe(setupErr.message)}</p><p class="portal-note">Jobbadresserna sparas i Supabase. Kör SQL-filen <strong>supabase/mail.sql</strong> en gång i SQL Editor, sedan syns adressen här.</p>`;
+  return;
+ }
+ const {data,error}=await db().from('work_mailboxes').select('id,address,display_name,kind,owner_id').order('address');
+ if(error){pane.innerHTML=`<h3>Inkorg</h3><p>${safe(error.message)}</p>`;return;}
+ mailboxes=(data||[]).filter(box=>box.address===INFO_ADDRESS||box.owner_id===user.id);
+ mailboxes.sort((a,b)=>Number(a.kind==='shared')-Number(b.kind==='shared')||a.address.localeCompare(b.address,'sv'));
+ if(!mailboxes.some(box=>box.id===activeMailboxId))activeMailboxId=mailboxes[0]?.id||null;
+ const current=mailboxes.find(box=>box.id===activeMailboxId);
+ let messages=[];
+ if(current){
+  const {data:rows,error:msgErr}=await db().from('work_messages').select('id,direction,from_address,to_address,subject,body,is_read,created_at').eq('mailbox_id',current.id).order('created_at',{ascending:false}).limit(100);
+  if(msgErr){pane.innerHTML=`<h3>Inkorg</h3><p>${safe(msgErr.message)}</p>`;return;}
+  messages=rows||[];
+ }
+ const open=messages.find(m=>m.id===openMessageId)||null;
+ pane.innerHTML=`<div class="inbox"><aside class="inbox-side"><h3>Jobbmejl</h3><p class="portal-note">Din adress och infomejlen som alla administratörer ser.</p><ul class="mailbox-list">${mailboxes.map(box=>`<li><button type="button" data-mailbox="${safe(box.id)}" aria-pressed="${box.id===activeMailboxId}"><strong>${safe(box.display_name)}</strong><br>${safe(box.address)}${box.kind==='shared'?'<br><small>Syns för alla</small>':''}</button></li>`).join('')}</ul></aside><section class="inbox-main"><h3>${current?safe(current.address):'Inkorg'}</h3><form id="work-mail-form"><label>Till<input name="to" type="email" required maxlength="254" placeholder="namn@starenborg.se"></label><label>Ämne<input name="subject" required maxlength="200"></label><label>Meddelande<textarea name="body" required maxlength="8000" rows="5"></textarea></label><button class="btn" type="submit">Skicka</button></form><ul class="mail-list">${messages.map(m=>`<li><button type="button" data-message="${safe(m.id)}"><strong>${safe(m.subject||'(utan ämne)')}</strong>${safe(m.direction==='out'?'Till '+m.to_address:'Från '+m.from_address)} · ${safe(new Date(m.created_at).toLocaleString('sv-SE',{dateStyle:'medium',timeStyle:'short'}))}</button></li>`).join('')||'<li>Inkorgen är tom.</li>'}</ul>${open?`<article class="mail-read"><h4>${safe(open.subject)}</h4><p><strong>${safe(open.direction==='out'?'Till':'Från')}:</strong> ${safe(open.direction==='out'?open.to_address:open.from_address)}</p><p>${safe(open.body)}</p></article>`:''}</section></div>`;
+ pane.querySelectorAll('[data-mailbox]').forEach(btn=>btn.addEventListener('click',()=>{activeMailboxId=btn.getAttribute('data-mailbox');openMessageId=null;renderPortal();}));
+ pane.querySelectorAll('[data-message]').forEach(btn=>btn.addEventListener('click',async()=>{
+  openMessageId=btn.getAttribute('data-message');
+  await db().from('work_messages').update({is_read:true}).eq('id',openMessageId);
+  renderPortal();
+ }));
+ const form=document.getElementById('work-mail-form');
+ if(form)form.addEventListener('submit',sendWorkMail);
+}
+async function sendWorkMail(e){
+ e.preventDefault();
+ const box=mailboxes.find(b=>b.id===activeMailboxId);
+ if(!box)return;
+ const f=new FormData(e.currentTarget);
+ const to=String(f.get('to')||'').trim().toLowerCase();
+ const subject=String(f.get('subject')||'').trim();
+ const body=String(f.get('body')||'').trim();
+ const {error}=await db().from('work_messages').insert({mailbox_id:box.id,direction:'out',from_address:box.address,to_address:to,subject,body,is_read:true});
+ if(error){statusMessage('Kunde inte skicka: '+error.message);return;}
+ const {data:dest}=await db().from('work_mailboxes').select('id').eq('address',to).maybeSingle();
+ if(dest&&dest.id!==box.id){
+  const {error:inErr}=await db().from('work_messages').insert({mailbox_id:dest.id,direction:'in',from_address:box.address,to_address:to,subject,body,is_read:false});
+  if(inErr){statusMessage('Mejlet sparades i Skickat, men kunde inte läggas i mottagarens inkorg: '+inErr.message);return;}
+ }
+ statusMessage(dest?'Mejlet är skickat till den lokala inkorgen.':'Mejlet är sparat i Skickat. Adressen finns inte bland jobbmejlen.');
+ renderPortal();
 }
 async function portalLogin(e){
  e.preventDefault();const form=e.currentTarget;const f=new FormData(form);
