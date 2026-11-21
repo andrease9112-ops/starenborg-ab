@@ -334,6 +334,7 @@ async function adminLogin(event){
  }
 }
 async function adminLogout(){
+ sessionStorage.removeItem('starenborg-demo-user');
  if(window.MALARDALA_AUTH.client)await window.MALARDALA_AUTH.client.auth.signOut();
  window.MALARDALA_AUTH.user=null;window.MALARDALA_AUTH.isAdmin=false;renderPage();
 }
@@ -435,8 +436,14 @@ function cssPath(el,root){
 async function renderPortal(){
  const el=document.getElementById('portal-app');if(!el)return;
  const a=window.MALARDALA_AUTH;
- if(!a?.user){
-  el.innerHTML=`<div class="portal-box"><form onsubmit="portalLogin(event)"><label>E-post<input type="email" name="email" autocomplete="username" required></label><label>Lösenord<input type="password" name="password" autocomplete="current-password" required></label><button class="btn" type="submit">Logga in</button></form><p class="portal-note">Kundkonton skapas av administratören. Dela inte känsliga dokument förrän åtkomstreglerna har aktiverats och testats.</p><p id="portal-message" role="status"></p></div>`;return;
+ const demo=demoSession();
+ if(!a?.user&&!demo){
+  el.innerHTML=`<div class="portal-box"><form onsubmit="portalLogin(event)"><label>E-post<input type="email" name="email" autocomplete="username" required></label><label>Lösenord<input type="password" name="password" autocomplete="current-password" required></label><button class="btn" type="submit">Logga in</button></form><p class="portal-note">Övningskonton tills den riktiga mejlen kopplas in: jessica@starenborg.se och andreas@starenborg.se, lösenord demo. De når bara övningsinkorgen.</p><p id="portal-message" role="status"></p></div>`;return;
+ }
+ if(demo&&!a?.user){
+  el.innerHTML=`<div class="portal-box"><p>Övningskonto <strong>${safe(demo.email)}</strong></p><p class="portal-note">Mejlen stannar i den här webbläsaren. Riktiga adresser kopplas in när domänen och Microsoft 365 är klara.</p><button type="button" onclick="switchDemoAccount()">Byt konto</button><button type="button" onclick="adminLogout()">Logga ut</button><p id="portal-message" role="status"></p></div><div id="portal-pane" class="portal-box">Laddar…</div>`;
+  await renderInbox(document.getElementById('portal-pane'));
+  return;
  }
  const admin=a.isAdmin;
  const tabs=admin?[['inkorg','Inkorg'],['innehall','Redigera hemsidan'],['kontakt','Kontakt och möten'],['bilder','Bilder'],['kunder','Kunder'],['dokument','Underlag'],['nyheter','Nyheter']]:[['dokument','Mina underlag']];
@@ -453,6 +460,37 @@ async function renderPortal(){
 }
 const WORK_DOMAIN='starenborg.se';
 const INFO_ADDRESS='info@'+WORK_DOMAIN;
+const DEMO_ACCOUNTS=[
+ {id:'demo-jessica',name:'Jessica',email:'jessica@starenborg.se',password:'demo'},
+ {id:'demo-andreas',name:'Andreas',email:'andreas@starenborg.se',password:'demo'}
+];
+function demoSession(){
+ try{return JSON.parse(sessionStorage.getItem('starenborg-demo-user')||'null');}catch(e){return null;}
+}
+function readDemoMail(){
+ try{
+  const saved=JSON.parse(localStorage.getItem('starenborg-demo-mail')||'null');
+  if(saved&&Array.isArray(saved.mailboxes)&&Array.isArray(saved.messages))return saved;
+ }catch(e){}
+ const now=Date.now();
+ const store={mailboxes:[
+  {id:'mb-jessica',address:'jessica@starenborg.se',display_name:'Jessica',kind:'personal',owner_id:'demo-jessica'},
+  {id:'mb-andreas',address:'andreas@starenborg.se',display_name:'Andreas',kind:'personal',owner_id:'demo-andreas'},
+  {id:'mb-info',address:INFO_ADDRESS,display_name:'Info',kind:'shared',owner_id:null}
+ ],messages:[
+  {id:'m-welcome',mailbox_id:'mb-jessica',direction:'in',from_address:INFO_ADDRESS,to_address:'jessica@starenborg.se',subject:'Välkommen till övningsinkorgen',body:'Det här är ett övningsmejl till Jessica. Skicka till andreas@starenborg.se eller info@starenborg.se och byt konto för att läsa det.',is_read:false,created_at:new Date(now-3600000).toISOString()},
+  {id:'m-info',mailbox_id:'mb-info',direction:'in',from_address:'andreas@starenborg.se',to_address:INFO_ADDRESS,subject:'Gemensam info',body:'Det här mejlet syns för både Jessica och Andreas.',is_read:false,created_at:new Date(now-7200000).toISOString()}
+ ]};
+ localStorage.setItem('starenborg-demo-mail',JSON.stringify(store));
+ return store;
+}
+function writeDemoMail(store){localStorage.setItem('starenborg-demo-mail',JSON.stringify(store));}
+function switchDemoAccount(){
+ const current=demoSession();
+ const next=DEMO_ACCOUNTS.find(account=>account.id!==current?.id)||DEMO_ACCOUNTS[0];
+ sessionStorage.setItem('starenborg-demo-user',JSON.stringify({id:next.id,email:next.email,name:next.name,demo:true}));
+ activeMailboxId=null;openMessageId=null;renderPortal();
+}
 function workLocalPart(user){
  const meta=user?.user_metadata||{};
  const named=String(meta.full_name||meta.name||meta.display_name||'').trim();
@@ -479,7 +517,30 @@ async function ensureWorkMailboxes(user){
  }
  return null;
 }
+function renderDemoInbox(pane,demo){
+ const store=readDemoMail();
+ mailboxes=store.mailboxes.filter(box=>box.address===INFO_ADDRESS||box.owner_id===demo.id);
+ mailboxes.sort((a,b)=>Number(a.kind==='shared')-Number(b.kind==='shared')||a.address.localeCompare(b.address,'sv'));
+ if(!mailboxes.some(box=>box.id===activeMailboxId))activeMailboxId=mailboxes[0]?.id||null;
+ const current=mailboxes.find(box=>box.id===activeMailboxId);
+ const messages=current?store.messages.filter(m=>m.mailbox_id===current.id).sort((a,b)=>b.created_at.localeCompare(a.created_at)):[];
+ const open=messages.find(m=>m.id===openMessageId)||null;
+ pane.innerHTML=`<div class="inbox"><aside class="inbox-side"><h3>Jobbmejl</h3><p class="portal-note">Din adress och infomejlen som alla övningskonton ser.</p><ul class="mailbox-list">${mailboxes.map(box=>`<li><button type="button" data-mailbox="${safe(box.id)}" aria-pressed="${box.id===activeMailboxId}"><strong>${safe(box.display_name)}</strong><br>${safe(box.address)}${box.kind==='shared'?'<br><small>Syns för alla</small>':''}</button></li>`).join('')}</ul></aside><section class="inbox-main"><h3>${current?safe(current.address):'Inkorg'}</h3><form id="work-mail-form"><label>Till<input name="to" type="email" required maxlength="254" value="${safe(current&&current.kind==='personal'?'info@starenborg.se':'jessica@starenborg.se')}"></label><label>Ämne<input name="subject" required maxlength="200"></label><label>Meddelande<textarea name="body" required maxlength="8000" rows="5"></textarea></label><button class="btn" type="submit">Skicka</button></form><ul class="mail-list">${messages.map(m=>`<li><button type="button" data-message="${safe(m.id)}"><strong>${m.is_read?'':'● '}${safe(m.subject||'(utan ämne)')}</strong>${safe(m.direction==='out'?'Till '+m.to_address:'Från '+m.from_address)} · ${safe(new Date(m.created_at).toLocaleString('sv-SE',{dateStyle:'medium',timeStyle:'short'}))}</button></li>`).join('')||'<li>Inkorgen är tom.</li>'}</ul>${open?`<article class="mail-read"><h4>${safe(open.subject)}</h4><p><strong>${safe(open.direction==='out'?'Till':'Från')}:</strong> ${safe(open.direction==='out'?open.to_address:open.from_address)}</p><p>${safe(open.body)}</p></article>`:''}</section></div>`;
+ pane.querySelectorAll('[data-mailbox]').forEach(btn=>btn.addEventListener('click',()=>{activeMailboxId=btn.getAttribute('data-mailbox');openMessageId=null;renderPortal();}));
+ pane.querySelectorAll('[data-message]').forEach(btn=>btn.addEventListener('click',()=>{
+  openMessageId=btn.getAttribute('data-message');
+  const saved=readDemoMail();
+  const message=saved.messages.find(item=>item.id===openMessageId);
+  if(message)message.is_read=true;
+  writeDemoMail(saved);
+  renderPortal();
+ }));
+ const form=document.getElementById('work-mail-form');
+ if(form)form.addEventListener('submit',sendWorkMail);
+}
 async function renderInbox(pane){
+ const demo=demoSession();
+ if(demo&&!window.MALARDALA_AUTH.user){renderDemoInbox(pane,demo);return;}
  const user=window.MALARDALA_AUTH.user;
  const setupErr=await ensureWorkMailboxes(user);
  if(setupErr){
@@ -514,6 +575,20 @@ async function sendWorkMail(e){
  const box=mailboxes.find(b=>b.id===activeMailboxId);
  if(!box)return;
  const f=new FormData(e.currentTarget);
+ if(demoSession()&&!window.MALARDALA_AUTH.user){
+  const to=String(f.get('to')||'').trim().toLowerCase();
+  const subject=String(f.get('subject')||'').trim();
+  const body=String(f.get('body')||'').trim();
+  const store=readDemoMail();
+  const stamp=new Date().toISOString();
+  store.messages.push({id:'m-'+Date.now(),mailbox_id:box.id,direction:'out',from_address:box.address,to_address:to,subject,body,is_read:true,created_at:stamp});
+  const dest=store.mailboxes.find(item=>item.address===to);
+  if(dest&&dest.id!==box.id)store.messages.push({id:'m-'+(Date.now()+1),mailbox_id:dest.id,direction:'in',from_address:box.address,to_address:to,subject,body,is_read:false,created_at:stamp});
+  writeDemoMail(store);
+  renderPortal();
+  statusMessage(dest?'Mejlet ligger i övningsinkorgen. Byt konto för att läsa det hos mottagaren.':'Mejlet är sparat i Skickat. Adressen finns inte bland övningsadresserna.');
+  return;
+ }
  const to=String(f.get('to')||'').trim().toLowerCase();
  const subject=String(f.get('subject')||'').trim();
  const body=String(f.get('body')||'').trim();
@@ -529,7 +604,14 @@ async function sendWorkMail(e){
 }
 async function portalLogin(e){
  e.preventDefault();const form=e.currentTarget;const f=new FormData(form);
- const {error}=await db().auth.signInWithPassword({email:String(f.get('email')),password:String(f.get('password'))});
+ const email=String(f.get('email')||'').trim().toLowerCase();
+ const password=String(f.get('password')||'');
+ const account=DEMO_ACCOUNTS.find(item=>item.email===email&&item.password===password);
+ if(account){
+  sessionStorage.setItem('starenborg-demo-user',JSON.stringify({id:account.id,email:account.email,name:account.name,demo:true}));
+  portalTab='inkorg';activeMailboxId=null;openMessageId=null;await renderPortal();return;
+ }
+ const {error}=await db().auth.signInWithPassword({email,password});
  if(error){statusMessage('Inloggning misslyckades: '+error.message);return;}
  await refreshAdminSession();await renderPortal();
 }
