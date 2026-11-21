@@ -2,7 +2,7 @@
 @media (max-width: 800px) {
   :root {
     --mobile-header-height: 58px;
-    --mobile-nav-height: 132px;
+    --mobile-nav-height: 92px;
     --mobile-safe-top: env(safe-area-inset-top, 0px);
   }
 
@@ -67,7 +67,7 @@
     display: none !important;
   }
 
-  /* Two rows that always fit a real phone — nothing slides off the edge */
+  /* One row of department buttons, Omnio wider on the row below. Colors match desktop. */
   #content > .hero-nav,
   .hero-nav {
     position: fixed !important;
@@ -95,34 +95,35 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 1 1 calc(33.33% - 6px) !important;
+    flex: 1 1 0 !important;
     min-width: 0 !important;
-    max-width: calc(33.33% - 4px) !important;
+    max-width: none !important;
     min-height: 34px !important;
     height: 34px !important;
-    padding: 0 4px !important;
+    padding: 0 2px !important;
     border: 0 !important;
     border-radius: 8px !important;
-    background: rgba(255, 248, 240, 0.08) !important;
+    background: rgba(7, 26, 37, 0.55) !important;
     color: #f4dfbf !important;
     text-decoration: none !important;
-    font: 700 12px/1 Arial, sans-serif !important;
+    font: 700 11px/1 Arial, sans-serif !important;
     box-shadow: none !important;
     white-space: nowrap !important;
   }
 
   .hero-nav a[aria-current="page"] {
     background: rgba(7, 26, 37, 0.8) !important;
-    box-shadow: inset 0 0 0 1px rgba(244, 223, 191, 0.45) !important;
+    box-shadow: none !important;
   }
 
   .hero-nav a.portal-link {
     background: #e6c49a !important;
     color: #0b202b !important;
     flex: 1 1 100% !important;
-    max-width: min(240px, 92%) !important;
-    height: 36px !important;
-    font-size: 13px !important;
+    max-width: min(320px, 94%) !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    font-size: 15px !important;
   }
 
   /* Match desktop home: hide the big division card grid */
