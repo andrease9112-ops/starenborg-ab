@@ -2,22 +2,27 @@
 @media (max-width: 800px) {
   :root {
     --mobile-header-height: 88px;
+    --mobile-nav-height: 96px;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip; /* avoid overflow-x:hidden breaking fixed/sticky chrome */
   }
 
   body {
     background: #0b202b !important;
     color: #e6c49a;
     padding-top: 0;
+    overflow-x: clip !important;
   }
 
-  /* —— Sticky logo —— */
+  /* —— Locked logo (fixed like desktop) —— */
   #header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 40;
     height: var(--mobile-header-height);
     overflow: hidden;
@@ -62,9 +67,11 @@
 
   #content > .hero-nav,
   .hero-nav {
-    position: sticky !important;
+    position: fixed !important;
     top: var(--mobile-header-height) !important;
-    inset: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
     z-index: 35 !important;
     display: flex !important;
     flex-wrap: wrap !important;
@@ -78,6 +85,11 @@
     border-bottom: 1px solid rgba(174, 151, 115, 0.4);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Space for fixed logo + department buttons */
+  #content {
+    padding-top: calc(var(--mobile-header-height) + var(--mobile-nav-height)) !important;
   }
 
   .hero-nav a {
@@ -314,6 +326,7 @@
 @media (max-width: 390px) {
   :root {
     --mobile-header-height: 80px;
+    --mobile-nav-height: 100px;
   }
 
   #header .starenborg-logo {
